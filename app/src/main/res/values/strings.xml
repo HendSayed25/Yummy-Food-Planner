@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Yummy-Food-Planner</string>
+    <string name="app_name">Yummy</string>
+    <string name="logo_ic">logo ic</string>
 </resources>

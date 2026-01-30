@@ -17,7 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.material.imageview.ShapeableImageView;
+import com.example.yummy_food_planner.onboarding.OnboardingActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -64,19 +64,29 @@ public class SplashActivity extends AppCompatActivity {
         Animation fadeOut = AnimationUtils.loadAnimation(SplashActivity.this, R.anim.rotate_fade_out);
         fadeOut.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+            }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 logo.setVisibility(View.GONE);
                 appName.setVisibility(View.GONE);
+
+                navigateTo(new OnboardingActivity());
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
         });
 
         logo.startAnimation(fadeOut);
         appName.startAnimation(fadeOut);
+    }
+
+    private void navigateTo(Activity activity) {
+        Intent intent = new Intent(SplashActivity.this, activity.getClass());
+        startActivity(intent);
+        finish();
     }
 }

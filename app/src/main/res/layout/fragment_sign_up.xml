@@ -25,14 +25,14 @@
         android:id="@+id/emailLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/email"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
-        android:textColor="@color/logo_bg"
+        android:layout_margin="20dp"
         android:fontFamily="@font/poppins_semibold"
-        app:layout_constraintTop_toBottomOf="@id/signUpTitle"
-        android:layout_margin="20dp"/>
+        android:text="@string/email"
+        android:textColor="@color/logo_bg"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/signUpTitle" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -70,30 +70,30 @@
         android:id="@+id/passwordLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/password"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
-        android:textColor="@color/logo_bg"
+        android:layout_margin="20dp"
         android:fontFamily="@font/poppins_semibold"
-        app:layout_constraintTop_toBottomOf="@id/emailTextFieldSignUp"
-        android:layout_margin="20dp"/>
+        android:text="@string/password"
+        android:textColor="@color/logo_bg"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailTextFieldSignUp" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordTextFieldSignUp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:textColorHint="@color/blue_dark"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
         app:boxStrokeColor="@color/logo_bg"
-        android:textColorHint="@color/blue_dark"
-        app:hintTextColor="@color/blue_primary"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/blue_primary"
+        app:hintTextColor="@color/blue_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordLabel">
@@ -105,9 +105,9 @@
             android:fontFamily="@font/poppins_semibold"
             android:hint="@string/enter_your_password"
             android:inputType="textPassword"
-            android:textColor="@color/blue_primary"
             android:maxLines="1"
             android:padding="14dp"
+            android:textColor="@color/blue_primary"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,14 +116,14 @@
         android:id="@+id/confirmPasswordLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/confirm_password"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
-        android:textColor="@color/logo_bg"
+        android:layout_margin="20dp"
         android:fontFamily="@font/poppins_semibold"
-        app:layout_constraintTop_toBottomOf="@id/passwordTextFieldSignUp"
-        android:layout_margin="20dp"/>
+        android:text="@string/confirm_password"
+        android:textColor="@color/logo_bg"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/passwordTextFieldSignUp" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -131,16 +131,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:textColorHint="@color/blue_dark"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
-        android:textColorHint="@color/blue_dark"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
         app:boxStrokeColor="@color/logo_bg"
-        app:hintTextColor="@color/blue_primary"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/blue_primary"
+        app:hintTextColor="@color/blue_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/confirmPasswordLabel">
@@ -152,9 +152,9 @@
             android:fontFamily="@font/poppins_semibold"
             android:hint="@string/confirm_password"
             android:inputType="textPassword"
-            android:textColor="@color/blue_dark"
             android:maxLines="1"
             android:padding="14dp"
+            android:textColor="@color/blue_dark"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 

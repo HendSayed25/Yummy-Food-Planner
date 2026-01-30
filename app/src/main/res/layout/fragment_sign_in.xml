@@ -59,8 +59,8 @@
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
-        app:hintTextColor="@color/blue_primary"
         app:boxStrokeColor="@color/logo_bg"
+        app:hintTextColor="@color/blue_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subTitleTv">
@@ -86,13 +86,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="16dp"
+        android:textColorHint="@color/blue_dark"
         app:boxBackgroundColor="@color/white"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
         app:boxStrokeColor="@color/logo_bg"
-        android:textColorHint="@color/blue_dark"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/blue_primary"
         app:hintTextColor="@color/blue_primary"
@@ -109,9 +109,9 @@
             android:fontFamily="@font/poppins_semibold"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:textColor="@color/blue_dark"
             android:maxLines="1"
             android:padding="14dp"
+            android:textColor="@color/blue_dark"
             android:textSize="16sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -209,11 +209,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
+            android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/sign_up"
             android:textColor="@color/logo_bg"
-            android:clickable="true"
             android:textSize="18sp" />
     </LinearLayout>
 

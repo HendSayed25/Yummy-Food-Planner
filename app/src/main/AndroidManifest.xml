@@ -10,7 +10,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.YummyFoodPlanner">
-
+        <activity
+            android:name=".onboarding.OnboardingActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">

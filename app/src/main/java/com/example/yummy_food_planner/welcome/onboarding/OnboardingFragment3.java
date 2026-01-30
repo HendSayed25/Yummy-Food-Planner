@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.onboarding;
+package com.example.yummy_food_planner.welcome.onboarding;
 
 import android.os.Bundle;
 import android.os.Handler;

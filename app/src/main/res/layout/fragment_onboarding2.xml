@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_linear_bg"
+    tools:context=".onboarding.OnboardingFragment2">
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/skipBtn2"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_margin="20dp"
+        android:background="@drawable/custom_btn_onboarding"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/skip"
+        android:textAllCaps="false"
+        android:textColor="@color/blue_dark"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/onboardingImage2"
+        android:layout_width="370dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="50dp"
+        android:contentDescription="@string/onboarding_image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/integredintes"
+        app:layout_constraintBottom_toTopOf="@+id/descriptionTv2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/skipBtn2" />
+
+
+    <LinearLayout
+        android:id="@+id/dotsContainer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/descriptionTv2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/onboardingImage2" />
+
+
+    <TextView
+        android:id="@+id/descriptionTv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/discover_it_s_ingredients"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dotsContainer2" />
+
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/backBtn2"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_btn_onboarding"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingHorizontal="50dp"
+            android:text="@string/back"
+            android:textAllCaps="false"
+            android:textColor="@color/blue_dark"
+            android:textSize="23sp" />
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="1dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/nextBtn2"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_btn_onboarding"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingHorizontal="50dp"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/blue_dark"
+            android:textSize="23sp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

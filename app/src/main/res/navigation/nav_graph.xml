@@ -3,10 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/onboardingFragment1">
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.yummy_food_planner.welcome.splash.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_onboardingFragment1"
+            app:destination="@id/onboardingFragment1" />
+    </fragment>
+
     <fragment
         android:id="@+id/onboardingFragment1"
-        android:name="com.example.yummy_food_planner.onboarding.OnboardingFragment1"
+        android:name="com.example.yummy_food_planner.welcome.onboarding.OnboardingFragment1"
         android:label="fragment_onboarding1"
         tools:layout="@layout/fragment_onboarding1" >
         <action
@@ -16,18 +27,21 @@
             android:id="@+id/action_onboardingFragment1_to_onboardingFragment3"
             app:destination="@id/onboardingFragment3" />
     </fragment>
+
     <fragment
         android:id="@+id/onboardingFragment2"
-        android:name="com.example.yummy_food_planner.onboarding.OnboardingFragment2"
+        android:name="com.example.yummy_food_planner.welcome.onboarding.OnboardingFragment2"
         android:label="fragment_onboarding2"
         tools:layout="@layout/fragment_onboarding2" >
         <action
             android:id="@+id/action_onboardingFragment2_to_onboardingFragment3"
             app:destination="@id/onboardingFragment3" />
     </fragment>
+
     <fragment
         android:id="@+id/onboardingFragment3"
-        android:name="com.example.yummy_food_planner.onboarding.OnboardingFragment3"
+        android:name="com.example.yummy_food_planner.welcome.onboarding.OnboardingFragment3"
         android:label="fragment_onboarding3"
         tools:layout="@layout/fragment_onboarding3" />
+
 </navigation>

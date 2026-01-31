@@ -1,5 +1,8 @@
 package com.example.yummy_food_planner.home;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.yummy_food_planner.R;
@@ -24,6 +28,9 @@ public class HomeFragment extends Fragment {
     private MealAdapter mealAdapter;
 
     private View mealOfDay;
+    private View noInternetLayout;
+    private TextView homeTitle1,homeTitle2,homeTitle3;
+    private ImageView logoIcon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,12 +42,47 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mealOfDay = view.findViewById(R.id.mealOfDay);
+        noInternetLayout = view.findViewById(R.id.noInternetLayout);
         mealRecycler = view.findViewById(R.id.mealsHomeRecycler);
+        homeTitle1 = view.findViewById(R.id.title1);
+        homeTitle2 = view.findViewById(R.id.home_title2);
+        homeTitle3 = view.findViewById(R.id.home_title3);
+
+        if (isNetworkAvailable()) {
+            showContent();
+        } else {
+            showNoInternet();
+        }
+
+    }
+
+    private void showNoInternet() {
+        noInternetLayout.setVisibility(View.VISIBLE);
+        mealOfDay.setVisibility(View.GONE);
+        homeTitle1.setVisibility(View.GONE);
+        homeTitle2.setVisibility(View.GONE);
+        homeTitle3.setVisibility(View.GONE);
+        mealRecycler.setVisibility(View.GONE);
+    }
+
+    private void showContent() {
+        noInternetLayout.setVisibility(View.GONE);
+        mealOfDay.setVisibility(View.VISIBLE);
+        homeTitle1.setVisibility(View.VISIBLE);
+        homeTitle2.setVisibility(View.VISIBLE);
+        homeTitle3.setVisibility(View.VISIBLE);
+        mealRecycler.setVisibility(View.VISIBLE);
+
         mealAdapter = new MealAdapter(getMeals());
         mealRecycler.setAdapter(mealAdapter);
 
         setRandomMealOfDay();
-
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)
+                requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     private List<Meal> getMeals(){

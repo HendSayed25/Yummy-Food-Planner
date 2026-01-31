@@ -33,4 +33,6 @@
     <string name="today_s_yummy_suggestion">Today\'s yummy suggestion :</string>
     <string name="meal_image">meal image</string>
     <string name="discover_more_meals">Discover more meals :</string>
+    <string name="your_favorite_meals">Your Favorite Meals :</string>
+    <string name="heart_icon">Heart Icon</string>
 </resources>

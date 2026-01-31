@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputLayout;
 public class SignInFragment extends Fragment {
 
     private TextView signUpBtn;
+    private AppCompatButton signInBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,9 +34,14 @@ public class SignInFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         signUpBtn = view.findViewById(R.id.signupTv);
+        signInBtn = view.findViewById(R.id.loginBtn);
 
         signUpBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_signInFragment_to_signUpFragment);
+        });
+
+        signInBtn.setOnClickListener(v->{
+            Navigation.findNavController(v).navigate(R.id.action_signInFragment_to_homeFragment);
         });
     }
 }

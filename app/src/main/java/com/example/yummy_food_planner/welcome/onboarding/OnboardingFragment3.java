@@ -46,6 +46,7 @@ public class OnboardingFragment3 extends BaseOnboardingFragment {
 
         startBtn.setOnClickListener(v -> {
             //navigate to login screen or home
+            Navigation.findNavController(v).navigate(R.id.action_onboardingFragment3_to_signInFragment);
         });
 
         backBtn.setOnClickListener(v -> {

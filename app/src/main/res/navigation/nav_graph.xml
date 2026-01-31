@@ -42,6 +42,28 @@
         android:id="@+id/onboardingFragment3"
         android:name="com.example.yummy_food_planner.welcome.onboarding.OnboardingFragment3"
         android:label="fragment_onboarding3"
-        tools:layout="@layout/fragment_onboarding3" />
+        tools:layout="@layout/fragment_onboarding3" >
+        <action
+            android:id="@+id/action_onboardingFragment3_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.yummy_food_planner.authentication.SignInFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.yummy_food_planner.authentication.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
 
 </navigation>

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.home.Meal;
+import com.example.yummy_food_planner.model.Meal;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.model.Meal;
 import com.example.yummy_food_planner.utils.GlideImageLoader;
 
 import java.util.List;

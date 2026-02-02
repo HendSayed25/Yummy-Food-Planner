@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.home;
+package com.example.yummy_food_planner.search;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,23 +15,23 @@ import com.example.yummy_food_planner.utils.GlideImageLoader;
 
 import java.util.List;
 
-public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder> {
+public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.SearchMealViewHolder> {
 
     private List<Meal> meals;
 
-    public MealAdapter(List<Meal> meals) {
+    public SearchMealAdapter(List<Meal> meals){
         this.meals = meals;
     }
 
     @NonNull
     @Override
-    public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.meal_item, parent, false);
-        return new MealViewHolder(view);
+    public SearchMealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item,parent,false);
+        return new SearchMealViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchMealViewHolder holder, int position) {
         Meal meal = meals.get(position);
 
         holder.mealName.setText(meal.getName());
@@ -43,14 +43,15 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         return meals.size();
     }
 
-    public static class MealViewHolder extends RecyclerView.ViewHolder {
+    public static class SearchMealViewHolder extends RecyclerView.ViewHolder{
+
         ImageView mealImage;
         TextView mealName;
-
-        public MealViewHolder(View view) {
+        public SearchMealViewHolder(View view){
             super(view);
-            mealImage = view.findViewById(R.id.ivMealImage);
-            mealName = view.findViewById(R.id.tvMealName);
+
+            mealImage = view.findViewById(R.id.ivMealImageSearch);
+            mealName = view.findViewById(R.id.tvMealNameSearch);
         }
     }
 }

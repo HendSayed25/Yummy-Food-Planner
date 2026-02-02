@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.home;
+package com.example.yummy_food_planner.model;
 
 public class Meal {
     private String name;

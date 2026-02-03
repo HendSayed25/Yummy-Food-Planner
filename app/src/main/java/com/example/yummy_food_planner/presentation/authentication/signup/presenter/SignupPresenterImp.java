@@ -39,7 +39,7 @@ public class SignupPresenterImp implements SignupPresenter {
         view.showViews();
         repository.signup(email, password, new AuthNetworkResponse() {
             @Override
-            public void onSignupSuccess(String userId) {
+            public void onSuccess(String userId) {
                 view.onSignupSuccess(userId);
             }
 

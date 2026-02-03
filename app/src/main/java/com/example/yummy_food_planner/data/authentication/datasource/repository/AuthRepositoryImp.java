@@ -18,6 +18,5 @@ public class AuthRepositoryImp implements AuthRepository {
 
     @Override
     public void signIn(User user,AuthNetworkResponse response) {
-        datasource.signIn(user);
     }
 }

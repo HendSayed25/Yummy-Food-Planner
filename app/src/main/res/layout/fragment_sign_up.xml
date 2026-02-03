@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/signUpLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signUpLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue_primary"
@@ -20,9 +19,9 @@
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/emailLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -98,6 +97,7 @@
         app:boxStrokeColor="@color/logo_bg"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/blue_primary"
+        app:errorEnabled="true"
         app:hintTextColor="@color/blue_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -145,6 +145,7 @@
         app:boxStrokeColor="@color/logo_bg"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/blue_primary"
+        app:errorEnabled="true"
         app:hintTextColor="@color/blue_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -214,14 +215,14 @@
     </LinearLayout>
 
     <include
-        android:id="@+id/noInternetLayout"
+        android:id="@+id/noInternetLayoutSignup"
         layout="@layout/no_internet_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

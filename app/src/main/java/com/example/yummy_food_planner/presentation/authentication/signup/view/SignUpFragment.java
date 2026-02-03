@@ -15,15 +15,23 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.presentation.authentication.signup.presenter.SignupPresenter;
+import com.example.yummy_food_planner.presentation.authentication.signup.presenter.SignupPresenterImp;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
-public class SignUpFragment extends Fragment  implements SignupView{
+public class SignUpFragment extends Fragment implements SignupView {
 
     private TextView signInTv;
     private ConstraintLayout signUpLayout;
     private View noInternetLayout;
+    private Button signupBtn;
+    private SignupPresenter presenter;
+    private TextInputEditText emailEdt, passwordEdt, confirmPasswordEdt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,16 +44,47 @@ public class SignUpFragment extends Fragment  implements SignupView{
 
         signInTv = view.findViewById(R.id.signInTv);
         signUpLayout = view.findViewById(R.id.signUpLayout);
-        noInternetLayout = view.findViewById(R.id.noInternetLayout);
+        signupBtn = view.findViewById(R.id.signUpBtn);
+        noInternetLayout = view.findViewById(R.id.noInternetLayoutSignup);
+        presenter = new SignupPresenterImp(this, getContext());
+        emailEdt = view.findViewById(R.id.etEmailSignUp);
+        passwordEdt = view.findViewById(R.id.etPasswordSignUp);
+        confirmPasswordEdt = view.findViewById(R.id.etConfirmPassword);
 
-        signInTv.setOnClickListener(v->{
+
+        signInTv.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(R.id.action_signUpFragment_to_signInFragment);
         });
+
+        signupBtn.setOnClickListener(v -> {
+            String email = emailEdt.getText().toString();
+            String password = passwordEdt.getText().toString();
+            String confirmPassword = confirmPasswordEdt.getText().toString();
+
+            presenter.signup(email, password, confirmPassword);
+        });
+
     }
 
     @Override
-    public void showError(String message) {
+    public void showError(String message, SignupErrorType type) {
+        switch (type) {
+            case EMAIL:
+                emailEdt.setError(message);
+                break;
 
+            case PASSWORD:
+                passwordEdt.setError(message);
+                break;
+
+            case CONFIRM_PASSWORD:
+                confirmPasswordEdt.setError(message);
+                break;
+
+            case GENERAL:
+                Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show();
+                break;
+        }
     }
 
     @Override

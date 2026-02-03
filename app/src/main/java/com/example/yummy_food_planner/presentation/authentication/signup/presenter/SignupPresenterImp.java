@@ -1,73 +1,86 @@
 package com.example.yummy_food_planner.presentation.authentication.signup.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthNetworkResponse;
+import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepository;
+import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
+import com.example.yummy_food_planner.data.authentication.utils.Validator;
+import com.example.yummy_food_planner.presentation.authentication.signup.view.SignupErrorType;
 import com.example.yummy_food_planner.presentation.authentication.signup.view.SignupView;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 public class SignupPresenterImp implements SignupPresenter {
 
     private SignupView view;
     private Context context;
+    private AuthRepository repository;
 
     public SignupPresenterImp(SignupView view, Context context) {
         this.view = view;
         this.context = context;
+        repository = new AuthRepositoryImp();
     }
 
     @Override
     public void signup(String email, String password, String confirmedPassword) {
-        if (!isEmailValid(email)) {
-            view.showError("invalid email please ensure the email is valid format");
-            return;
-        }
+        if (!isValidEmail(email)) return;
+        if (!isValidPassword(password)) return;
+        if (!isPasswordConfirmed(password, confirmedPassword)) return;
 
-        if (!isPasswordValid(password)) {
-            view.showError("invalid password please ensure password length >=6 numbers");
-            return;
-        }
-
-        if (!isPasswordConfirmed(password, confirmedPassword)) {
-            view.showError("password not match please ensure password you enter is correct ");
-            return;
-        }
-
-        registerUser(email, password);
-    }
-
-    private void registerUser(String email, String password) {
-        if (NetworkCheck.isNetworkAvailable(context)) {
-            view.showViews();
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    view.onSignupSuccess(auth.getCurrentUser().getUid());
-                } else {
-                    view.showError(Objects.requireNonNull(task.getException()).getMessage());
-                }
-            });
-        } else {
+        if (!NetworkCheck.isNetworkAvailable(context)) {
             view.noInternet();
+            return;
         }
+
+        view.showViews();
+        repository.signup(email, password, new AuthNetworkResponse() {
+            @Override
+            public void onSignupSuccess(String userId) {
+                view.onSignupSuccess(userId);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                handleSignupError(exception);
+            }
+        });
     }
 
-
-    private boolean isEmailValid(String email) {
-        if (email == null || email.isEmpty()) return false;
-
-        String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        return email.matches(emailPattern);
+    private boolean isValidEmail(String email) {
+        if (!Validator.isEmailValid(email)) {
+            view.showError("Invalid email format", SignupErrorType.EMAIL);
+            return false;
+        }
+        return true;
     }
 
-    private boolean isPasswordValid(String password) {
-        if (password == null || password.isEmpty()) return false;
-        return password.length() >= 6;
+    private boolean isValidPassword(String password) {
+        if (!Validator.isPasswordValid(password)) {
+            view.showError("Password must be >=6 chars", SignupErrorType.PASSWORD);
+            return false;
+        }
+        return true;
     }
 
-    public boolean isPasswordConfirmed(String password, String confirmPassword) {
-        return password.equals(confirmPassword);
+    private boolean isPasswordConfirmed(String password, String confirm) {
+        if (!Validator.isPasswordConfirmed(password, confirm)) {
+            view.showError("Passwords do not match", SignupErrorType.CONFIRM_PASSWORD);
+            return false;
+        }
+        return true;
+    }
+
+    private void handleSignupError(Exception exception) {
+        if (exception instanceof FirebaseAuthUserCollisionException) {
+            view.showError("Email already exists", SignupErrorType.EMAIL);
+        } else if (exception instanceof FirebaseAuthWeakPasswordException) {
+            view.showError("Weak password", SignupErrorType.PASSWORD);
+        } else {
+            view.showError("Something went wrong, try again", SignupErrorType.GENERAL);
+        }
     }
 }

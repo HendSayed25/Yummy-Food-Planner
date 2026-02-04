@@ -1,11 +1,11 @@
 package com.example.yummy_food_planner.presentation.authentication.signup.presenter;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthNetworkResponse;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepository;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
+import com.example.yummy_food_planner.data.authentication.model.User;
 import com.example.yummy_food_planner.data.authentication.utils.Validator;
 import com.example.yummy_food_planner.presentation.authentication.signup.view.SignupErrorType;
 import com.example.yummy_food_planner.presentation.authentication.signup.view.SignupView;
@@ -36,11 +36,11 @@ public class SignupPresenterImp implements SignupPresenter {
             return;
         }
 
-        view.showViews();
         repository.signup(email, password, new AuthNetworkResponse() {
             @Override
-            public void onSuccess(String userId) {
-                view.onSignupSuccess(userId);
+            public void onSuccess(User user) {
+                repository.saveUserData(user);
+                view.onSignupSuccess();
             }
 
             @Override

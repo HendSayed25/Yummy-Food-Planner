@@ -21,14 +21,12 @@ import android.widget.TextView;
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.authentication.signup.presenter.SignupPresenter;
 import com.example.yummy_food_planner.presentation.authentication.signup.presenter.SignupPresenterImp;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class SignUpFragment extends Fragment implements SignupView {
 
     private TextView signInTv;
-    private ConstraintLayout signUpLayout;
-    private View noInternetLayout;
     private Button signupBtn;
     private SignupPresenter presenter;
     private TextInputEditText emailEdt, passwordEdt, confirmPasswordEdt;
@@ -43,9 +41,7 @@ public class SignUpFragment extends Fragment implements SignupView {
         super.onViewCreated(view, savedInstanceState);
 
         signInTv = view.findViewById(R.id.signInTv);
-        signUpLayout = view.findViewById(R.id.signUpLayout);
         signupBtn = view.findViewById(R.id.signUpBtn);
-        noInternetLayout = view.findViewById(R.id.noInternetLayoutSignup);
         presenter = new SignupPresenterImp(this, getContext());
         emailEdt = view.findViewById(R.id.etEmailSignUp);
         passwordEdt = view.findViewById(R.id.etPasswordSignUp);
@@ -82,25 +78,18 @@ public class SignUpFragment extends Fragment implements SignupView {
                 break;
 
             case GENERAL:
-                Snackbar.make(requireView(), message, Snackbar.LENGTH_LONG).show();
+                CustomSnackBar.showSnackBar(requireView(), message, getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
                 break;
         }
     }
 
     @Override
-    public void onSignupSuccess(String userId) {
+    public void onSignupSuccess() {
         Navigation.findNavController(getView()).navigate(R.id.action_signUpFragment_to_homeFragment);
     }
 
     @Override
     public void noInternet() {
-        signUpLayout.setVisibility(GONE);
-        noInternetLayout.setVisibility(VISIBLE);
-    }
-
-    @Override
-    public void showViews() {
-        signUpLayout.setVisibility(VISIBLE);
-        noInternetLayout.setVisibility(GONE);
+        CustomSnackBar.showSnackBar(requireView(), getString(R.string.no_internet), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
 }

@@ -2,7 +2,6 @@ package com.example.yummy_food_planner.presentation.authentication.signup.view;
 
 public interface SignupView {
     void showError(String message,SignupErrorType type);
-    void onSignupSuccess(String userId);
+    void onSignupSuccess();
     void noInternet();
-    void showViews();
 }

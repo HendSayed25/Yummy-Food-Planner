@@ -41,5 +41,7 @@
     <string name="category">Category</string>
     <string name="ingredient">Ingredient</string>
     <string name="country">Country</string>
+    <string name="no_internet">No Internet connection</string>
+    <string name="failed_to_get_google_account">Failed to get Google account</string>
 
 </resources>

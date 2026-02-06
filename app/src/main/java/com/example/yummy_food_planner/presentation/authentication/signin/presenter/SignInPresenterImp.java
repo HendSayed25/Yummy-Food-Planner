@@ -1,9 +1,7 @@
 package com.example.yummy_food_planner.presentation.authentication.signin.presenter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
@@ -50,8 +48,6 @@ public class SignInPresenterImp implements SignInPresenter{
 
     @Override
     public void signInWithGoogle(Fragment fragment, ActivityResultLauncher<Intent> launcher) {
-        Log.e("TAG","In presenter");
-
         if (!NetworkCheck.isNetworkAvailable(context)) {
             view.onNoInternet();
             return;
@@ -59,13 +55,11 @@ public class SignInPresenterImp implements SignInPresenter{
 
         Intent signInIntent = googleSignInClient.getSignInIntent();
         launcher.launch(signInIntent);
-        Log.e("TAG","After launch");
     }
 
     @Override
     public void handleGoogleSignInResult(Task<GoogleSignInAccount> task) {
         try {
-            Log.e("TAG","In presenter handle");
 
             GoogleSignInAccount account = task.getResult(ApiException.class);
 

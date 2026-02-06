@@ -1,12 +1,12 @@
 package com.example.yummy_food_planner.data.authentication.datasource.repository;
 
 
-import android.util.Log;
-
-import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthNetworkResponse;
 import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthRemoteDatasource;
 import com.example.yummy_food_planner.data.authentication.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 
 public class AuthRepositoryImp implements AuthRepository {
 
@@ -17,26 +17,25 @@ public class AuthRepositoryImp implements AuthRepository {
     }
 
     @Override
-    public void signup(String email, String password, AuthNetworkResponse response) {
-        datasource.signup(email, password, response);
+    public Single<User> signup(String email, String password) {
+        return datasource.signup(email, password);
     }
 
     @Override
-    public void signInWithEmailAndPassword(String email,String password, AuthNetworkResponse response) {
-       datasource.signInWithEmailAndPassword(email,password,response);
+    public Completable signInWithEmailAndPassword(String email, String password) {
+        return datasource.signInWithEmailAndPassword(email,password);
     }
 
     @Override
-    public void signInWithGoogle(GoogleSignInAccount account, AuthNetworkResponse response) {
-        Log.e("TAG","In repo");
-
-        datasource.signInWithGoogle(account,response);
+    public Single<User> signInWithGoogle(GoogleSignInAccount account) {
+        return  datasource.signInWithGoogle(account);
     }
 
 
     @Override
-    public void saveUserData(User user) {
+    public Completable saveUserData(User user) {
         //TODO save it in local database
+        return null;
     }
 
     private String generateNameFromEmail(String email) {

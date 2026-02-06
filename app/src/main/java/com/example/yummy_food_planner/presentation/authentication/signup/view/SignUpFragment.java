@@ -92,4 +92,10 @@ public class SignUpFragment extends Fragment implements SignupView {
     public void noInternet() {
         CustomSnackBar.showSnackBar(requireView(), getString(R.string.no_internet), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
 }

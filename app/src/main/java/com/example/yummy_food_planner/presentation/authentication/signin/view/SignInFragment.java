@@ -112,4 +112,10 @@ public class SignInFragment extends Fragment implements SignInView {
     public void onNoInternet() {
         CustomSnackBar.showSnackBar(requireView(),getString(R.string.no_internet),getResources().getColor(R.color.logo_bg),getResources().getColor(R.color.blue_primary));
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
+    }
 }

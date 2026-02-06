@@ -7,10 +7,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthNetworkResponse;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepository;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
-import com.example.yummy_food_planner.data.authentication.model.User;
 import com.example.yummy_food_planner.data.authentication.utils.Validator;
 import com.example.yummy_food_planner.presentation.authentication.signin.view.SignInErrorType;
 import com.example.yummy_food_planner.presentation.authentication.signin.view.SignInView;
@@ -22,17 +20,23 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
-public class SignInPresenterImp implements SignInPresenter{
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class SignInPresenterImp implements SignInPresenter {
 
     private AuthRepository repository;
     private SignInView view;
     private Context context;
     private GoogleSignInClient googleSignInClient;
+    private CompositeDisposable compositeDisposable;
 
-    public SignInPresenterImp(SignInView view,Context context){
+    public SignInPresenterImp(SignInView view, Context context) {
         repository = new AuthRepositoryImp();
         this.view = view;
         this.context = context;
+        this.compositeDisposable = new CompositeDisposable();
 
         setupGoogleSignIn();
     }
@@ -68,17 +72,16 @@ public class SignInPresenterImp implements SignInPresenter{
                 return;
             }
 
-            repository.signInWithGoogle(account, new AuthNetworkResponse() {
-                @Override
-                public void onSuccess(User user) {
-                    view.onSignInSuccess();
-                }
-
-                @Override
-                public void onError(Exception exception) {
-                    handleGoogleError(exception);
-                }
-            });
+            compositeDisposable.add(
+                    repository.signInWithGoogle(account).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    user -> {
+                                        view.onSignInSuccess();
+                                        //TODO save the user
+                                    },
+                                    throwable -> handleGoogleError(throwable)
+                            )
+            );
 
         } catch (ApiException e) {
             handleGoogleApiError(e);
@@ -87,26 +90,23 @@ public class SignInPresenterImp implements SignInPresenter{
     }
 
     @Override
-    public void signInWithEmailAndPassword(String email,String password) {
+    public void signInWithEmailAndPassword(String email, String password) {
         if (!NetworkCheck.isNetworkAvailable(context)) {
             view.onNoInternet();
             return;
         }
 
-        if(!isValidEmail(email)) return;
-        if(!isValidPassword(password)) return;
+        if (!isValidEmail(email)) return;
+        if (!isValidPassword(password)) return;
 
-        repository.signInWithEmailAndPassword(email, password, new AuthNetworkResponse() {
-            @Override
-            public void onSuccess(User user) {
-                view.onSignInSuccess();
-            }
-
-            @Override
-            public void onError(Exception exception) {
-              handleError(exception);
-            }
-        });
+        compositeDisposable.add(
+                repository.signInWithEmailAndPassword(email, password)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread()).subscribe(
+                                () -> view.onSignInSuccess(),
+                                this::handleError
+                        )
+        );
     }
 
     private boolean isValidEmail(String email) {
@@ -125,29 +125,33 @@ public class SignInPresenterImp implements SignInPresenter{
         return true;
     }
 
-    private void handleError(Exception exception) {
-        if (exception == null || exception.getMessage() == null) {
-            view.showError("An error occurred", SignInErrorType.GENERAL);
-            return;
-        }
-
-        String message = exception.getMessage().toLowerCase();
-
-        if (message.contains("no user record")) {
-            view.showError("Email not registered", SignInErrorType.EMAIL);
-        } else if (message.contains("wrong password")) {
-            view.showError("Incorrect password", SignInErrorType.PASSWORD);
+    private void handleError(Throwable throwable) {
+        if (throwable instanceof Exception) {
+            Exception e = (Exception) throwable;
+            String message = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
+            if (message.contains("no user record")) {
+                view.showError("Email not registered", SignInErrorType.EMAIL);
+            } else if (message.contains("wrong password")) {
+                view.showError("Incorrect password", SignInErrorType.PASSWORD);
+            } else {
+                view.showError(e.getMessage() != null ? e.getMessage() : "An error occurred", SignInErrorType.GENERAL);
+            }
         } else {
-            view.showError(exception.getMessage(), SignInErrorType.GENERAL);
+            view.showError("Unexpected system error", SignInErrorType.GENERAL);
         }
     }
 
-    private void handleGoogleError(Exception exception) {
-        if (exception == null || exception.getMessage() == null) {
-            view.showError("Google sign in failed", SignInErrorType.GOOGLE_ACCOUNT);
-            return;
+    private void handleGoogleError(Throwable throwable) {
+        if (throwable instanceof Exception) {
+            Exception exception = (Exception) throwable;
+            if (exception.getMessage() == null) {
+                view.showError("Google sign in failed", SignInErrorType.GOOGLE_ACCOUNT);
+                return;
+            }
+            view.showError(exception.getMessage(), SignInErrorType.GOOGLE_ACCOUNT);
+        } else {
+            view.showError("Unexpected system error", SignInErrorType.GENERAL);
         }
-        view.showError(exception.getMessage(), SignInErrorType.GOOGLE_ACCOUNT);
     }
 
     private void handleGoogleApiError(ApiException e) {
@@ -166,5 +170,10 @@ public class SignInPresenterImp implements SignInPresenter{
         }
 
         view.showError(errorMessage, SignInErrorType.GOOGLE_ACCOUNT);
+    }
+
+    @Override
+    public void onDestroy() {
+        compositeDisposable.clear();
     }
 }

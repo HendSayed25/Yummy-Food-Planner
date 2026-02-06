@@ -12,4 +12,5 @@ public interface SignInPresenter {
     void signInWithGoogle(Fragment fragment, ActivityResultLauncher<Intent> launcher);
     void signInWithEmailAndPassword(String email,String password);
     void handleGoogleSignInResult(Task<GoogleSignInAccount> task);
+    void onDestroy();
 }

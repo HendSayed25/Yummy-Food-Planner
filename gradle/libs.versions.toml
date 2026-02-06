@@ -16,6 +16,7 @@ navigationFragment = "2.9.6"
 playServicesAuth = "21.5.0"
 rxandroid = "3.0.2"
 rxjava = "3.1.12"
+retrofit = "3.0.0"
 
 [libraries]
 credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
@@ -38,6 +39,9 @@ glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
 rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
+adapter-rxjava3 = { module = "com.squareup.retrofit2:adapter-rxjava3", version.ref = "retrofit" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 
 
 [plugins]

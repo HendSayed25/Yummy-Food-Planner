@@ -2,10 +2,8 @@ package com.example.yummy_food_planner.presentation.authentication.signup.presen
 
 import android.content.Context;
 
-import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthNetworkResponse;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepository;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
-import com.example.yummy_food_planner.data.authentication.model.User;
 import com.example.yummy_food_planner.data.authentication.utils.Validator;
 import com.example.yummy_food_planner.presentation.authentication.signup.view.SignupErrorType;
 import com.example.yummy_food_planner.presentation.authentication.signup.view.SignupView;
@@ -13,15 +11,21 @@ import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
 public class SignupPresenterImp implements SignupPresenter {
 
     private SignupView view;
     private Context context;
     private AuthRepository repository;
+    private CompositeDisposable compositeDisposable;
 
     public SignupPresenterImp(SignupView view, Context context) {
         this.view = view;
         this.context = context;
+        this.compositeDisposable = new CompositeDisposable();
         repository = new AuthRepositoryImp();
     }
 
@@ -36,18 +40,21 @@ public class SignupPresenterImp implements SignupPresenter {
             return;
         }
 
-        repository.signup(email, password, new AuthNetworkResponse() {
-            @Override
-            public void onSuccess(User user) {
-                repository.saveUserData(user);
-                view.onSignupSuccess();
-            }
+        compositeDisposable.add(
+                repository.signup(email, password).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                user -> {
+                                    repository.saveUserData(user);
+                                    view.onSignupSuccess();
+                                },
+                                this::handleSignupError
+                        )
+        );
+    }
 
-            @Override
-            public void onError(Exception exception) {
-                handleSignupError(exception);
-            }
-        });
+    @Override
+    public void onDestroy() {
+        compositeDisposable.clear();
     }
 
     private boolean isValidEmail(String email) {
@@ -74,13 +81,18 @@ public class SignupPresenterImp implements SignupPresenter {
         return true;
     }
 
-    private void handleSignupError(Exception exception) {
-        if (exception instanceof FirebaseAuthUserCollisionException) {
-            view.showError("Email already exists", SignupErrorType.EMAIL);
-        } else if (exception instanceof FirebaseAuthWeakPasswordException) {
-            view.showError("Weak password", SignupErrorType.PASSWORD);
+    private void handleSignupError(Throwable throwable) {
+        if (throwable instanceof Exception) {
+            Exception exception = (Exception) throwable;
+            if (exception instanceof FirebaseAuthUserCollisionException) {
+                view.showError("Email already exists", SignupErrorType.EMAIL);
+            } else if (exception instanceof FirebaseAuthWeakPasswordException) {
+                view.showError("Weak password", SignupErrorType.PASSWORD);
+            } else {
+                view.showError("Something went wrong, try again", SignupErrorType.GENERAL);
+            }
         } else {
-            view.showError("Something went wrong, try again", SignupErrorType.GENERAL);
+            view.showError("Unexpected system error", SignupErrorType.GENERAL);
         }
     }
 }

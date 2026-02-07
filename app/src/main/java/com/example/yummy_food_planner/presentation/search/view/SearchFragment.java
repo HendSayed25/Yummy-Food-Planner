@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.presentation.shared.model.Meal;
+import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -25,7 +25,7 @@ public class SearchFragment extends Fragment {
     private Chip chipCategory, chipIngredient, chipCountry;
     private RecyclerView searchResultRecycler;
     private SearchMealAdapter searchAdapter;
-    private List<Meal> allMeals;
+    private List<MealUiModel> allMealUiModels;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class SearchFragment extends Fragment {
 
         chipCategory.setChecked(true);
 
-        allMeals = getMealsList();
+        allMealUiModels = getMealsList();
 
         setupRecyclerView();
 
@@ -55,7 +55,7 @@ public class SearchFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
         searchResultRecycler.setLayoutManager(gridLayoutManager);
 
-        searchAdapter = new SearchMealAdapter(allMeals);
+        searchAdapter = new SearchMealAdapter(allMealUiModels);
         searchResultRecycler.setAdapter(searchAdapter);
     }
 
@@ -79,27 +79,27 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    private List<Meal> getMealsList() {
-        List<Meal> meals = new ArrayList<>();
+    private List<MealUiModel> getMealsList() {
+        List<MealUiModel> mealUiModels = new ArrayList<>();
 
-        meals.add(new Meal("Margherita Pizza", "https://www.themealdb.com/images/media/meals/x0lk931587671540.jpg"));
+        mealUiModels.add(new MealUiModel("Margherita Pizza", "https://www.themealdb.com/images/media/meals/x0lk931587671540.jpg"));
 
-        meals.add(new Meal("Pad Thai", "https://www.themealdb.com/images/media/meals/1529444830.jpg"));
+        mealUiModels.add(new MealUiModel("Pad Thai", "https://www.themealdb.com/images/media/meals/1529444830.jpg"));
 
-        meals.add(new Meal("Sushi Roll", "https://www.themealdb.com/images/media/meals/g046bb1663960946.jpg"));
+        mealUiModels.add(new MealUiModel("Sushi Roll", "https://www.themealdb.com/images/media/meals/g046bb1663960946.jpg"));
 
-        meals.add(new Meal("Tacos", "https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg"));
+        mealUiModels.add(new MealUiModel("Tacos", "https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg"));
 
-        meals.add(new Meal("Lasagna", "https://www.themealdb.com/images/media/meals/wtsvxx1511296896.jpg"));
+        mealUiModels.add(new MealUiModel("Lasagna", "https://www.themealdb.com/images/media/meals/wtsvxx1511296896.jpg"));
 
-        meals.add(new Meal("Pancakes", "https://www.themealdb.com/images/media/meals/rwuyqx1511383174.jpg"));
+        mealUiModels.add(new MealUiModel("Pancakes", "https://www.themealdb.com/images/media/meals/rwuyqx1511383174.jpg"));
 
-        meals.add(new Meal("Pad Thai", "https://www.themealdb.com/images/media/meals/1529444830.jpg"));
+        mealUiModels.add(new MealUiModel("Pad Thai", "https://www.themealdb.com/images/media/meals/1529444830.jpg"));
 
-        meals.add(new Meal("Sushi Roll", "https://www.themealdb.com/images/media/meals/g046bb1663960946.jpg"));
+        mealUiModels.add(new MealUiModel("Sushi Roll", "https://www.themealdb.com/images/media/meals/g046bb1663960946.jpg"));
 
-        meals.add(new Meal("Tacos", "https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg"));
+        mealUiModels.add(new MealUiModel("Tacos", "https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg"));
 
-        return meals;
+        return mealUiModels;
     }
 }

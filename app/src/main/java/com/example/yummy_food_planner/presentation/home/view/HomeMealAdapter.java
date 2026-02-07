@@ -10,16 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.presentation.shared.model.Meal;
+import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
+import com.example.yummy_food_planner.presentation.shared.utils.GlideImageLoader;
 
 import java.util.List;
 
 public class HomeMealAdapter extends RecyclerView.Adapter<HomeMealAdapter.MealViewHolder> {
 
-    private List<Meal> meals;
-
-    public HomeMealAdapter(List<Meal> meals) {
-        this.meals = meals;
+    private List<MealUiModel> mealUiModels;
+    public void setData(List<MealUiModel> mealUiModels){
+        this.mealUiModels = mealUiModels;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -31,13 +32,14 @@ public class HomeMealAdapter extends RecyclerView.Adapter<HomeMealAdapter.MealVi
 
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
-        Meal meal = meals.get(position);
-
+        MealUiModel mealUiModel = mealUiModels.get(position);
+        GlideImageLoader.load(holder.itemView.getContext(),mealUiModel.getImageUrl(),holder.mealImage);
+        holder.mealName.setText(mealUiModel.getName());
     }
 
     @Override
     public int getItemCount() {
-        return meals.size();
+        return mealUiModels.size();
     }
 
     public static class MealViewHolder extends RecyclerView.ViewHolder {

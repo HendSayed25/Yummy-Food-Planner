@@ -19,10 +19,11 @@
 
         <ImageView
             android:id="@+id/ivMealImageSearch"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:contentDescription="@string/meal_image"
             android:scaleType="centerCrop"
+            android:layout_margin="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +36,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/poppins_bold"
             android:maxLines="3"
-            android:padding="8dp"
+            android:padding="6dp"
             android:textColor="@color/blue_dark"
             android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"

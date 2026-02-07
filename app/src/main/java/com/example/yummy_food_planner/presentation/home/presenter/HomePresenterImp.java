@@ -1,14 +1,19 @@
 package com.example.yummy_food_planner.presentation.home.presenter;
 
-import static com.example.yummy_food_planner.presentation.home.mapper.HomeMapper.toUi;
-import static com.example.yummy_food_planner.presentation.home.mapper.HomeMapper.toUiList;
+import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.mapToUi;
+import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.mapToUiList;
 
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealRepository;
 import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealsRepositoryImp;
+import com.example.yummy_food_planner.presentation.home.model.RandomMealUiModel;
 import com.example.yummy_food_planner.presentation.home.view.HomeView;
+import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -42,7 +47,12 @@ public class HomePresenterImp implements HomePresenter {
                                     meal -> {
                                         view.hideLoading();
                                         view.showViews();
-                                        view.showRandomMeal(toUi(meal.getMeals().get(0)));
+                                        view.showRandomMeal(mapToUi(meal.getMeals().get(0),
+                                                m -> new RandomMealUiModel(
+                                                        m.getStrMeal(),
+                                                        m.getStrCategory(),
+                                                        m.getStrMealThumb()
+                                                )));
                                     },
                                     error -> {
                                         view.showError("No Meal for today");
@@ -70,7 +80,11 @@ public class HomePresenterImp implements HomePresenter {
                                     meals -> {
                                         view.hideLoading();
                                         view.showViews();
-                                        view.showMeals(toUiList(meals));
+                                        view.showMeals(mapToUiList(meals.getMeals(),
+                                                m -> new MealUiModel(
+                                                        m.getStrMeal(),
+                                                        m.getStrMealThumb()
+                                                )));
                                     },
                                     error -> {
                                         view.hideLoading();

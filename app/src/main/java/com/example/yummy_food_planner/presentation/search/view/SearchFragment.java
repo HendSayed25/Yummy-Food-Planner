@@ -1,9 +1,16 @@
 package com.example.yummy_food_planner.presentation.search.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,20 +19,28 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.presentation.search.presenter.SearchPresenter;
+import com.example.yummy_food_planner.presentation.search.presenter.SearchPresenterImp;
+import com.example.yummy_food_planner.presentation.search.utils.Filter;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+import io.reactivex.rxjava3.core.Observable;
+
+public class SearchFragment extends Fragment implements SearchViews {
 
     private TextInputEditText etSearch;
     private Chip chipCategory, chipIngredient, chipCountry;
     private RecyclerView searchResultRecycler;
     private SearchMealAdapter searchAdapter;
-    private List<MealUiModel> allMealUiModels;
+    private ProgressBar loading;
+    private View noInternetLayout;
+    private SearchPresenter presenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,21 +56,40 @@ public class SearchFragment extends Fragment {
         chipIngredient = view.findViewById(R.id.chipIngredient);
         chipCountry = view.findViewById(R.id.chipCountry);
         searchResultRecycler = view.findViewById(R.id.searchResultRecycler);
+        loading = view.findViewById(R.id.loadingSearch);
+        noInternetLayout = view.findViewById(R.id.noInternetLayoutSearch);
+        presenter = new SearchPresenterImp(this, getContext());
 
         chipCategory.setChecked(true);
-
-        allMealUiModels = getMealsList();
+        presenter.getAllCategories();
 
         setupRecyclerView();
 
         setupChips();
+
+        searchForMealByName();
+
+        searchAdapter.listener = name -> {
+            if (chipCategory.isChecked()) {
+                presenter.getMealsByCategory(name);
+                presenter.setFilter(Filter.CATEGORY, name);
+            } else if (chipCountry.isChecked()) {
+                presenter.getMealsByCountry(name);
+                presenter.setFilter(Filter.COUNTRY, name);
+
+            } else {
+                presenter.getMealsByIngredient(name);
+                presenter.setFilter(Filter.INGREDIENT, name);
+            }
+        };
     }
 
     private void setupRecyclerView() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), 2);
         searchResultRecycler.setLayoutManager(gridLayoutManager);
 
-        searchAdapter = new SearchMealAdapter(allMealUiModels);
+        searchAdapter = new SearchMealAdapter();
+        searchAdapter.setData(Collections.emptyList());
         searchResultRecycler.setAdapter(searchAdapter);
     }
 
@@ -64,42 +98,84 @@ public class SearchFragment extends Fragment {
             chipCategory.setChecked(true);
             chipIngredient.setChecked(false);
             chipCountry.setChecked(false);
+            presenter.getAllCategories();
         });
 
         chipIngredient.setOnClickListener(v -> {
             chipCategory.setChecked(false);
             chipIngredient.setChecked(true);
             chipCountry.setChecked(false);
+            presenter.getAllIngredients();
         });
 
         chipCountry.setOnClickListener(v -> {
             chipCategory.setChecked(false);
             chipIngredient.setChecked(false);
             chipCountry.setChecked(true);
+            presenter.getAllCountries();
         });
     }
 
-    private List<MealUiModel> getMealsList() {
-        List<MealUiModel> mealUiModels = new ArrayList<>();
+    private void searchForMealByName() {
 
-        mealUiModels.add(new MealUiModel("Margherita Pizza", "https://www.themealdb.com/images/media/meals/x0lk931587671540.jpg"));
+        Observable<String> searchObservable = Observable.create(emitter -> {
+            TextWatcher watcher = new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    Log.e("TAG", "text change");
 
-        mealUiModels.add(new MealUiModel("Pad Thai", "https://www.themealdb.com/images/media/meals/1529444830.jpg"));
+                    emitter.onNext(s.toString());
+                }
 
-        mealUiModels.add(new MealUiModel("Sushi Roll", "https://www.themealdb.com/images/media/meals/g046bb1663960946.jpg"));
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-        mealUiModels.add(new MealUiModel("Tacos", "https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg"));
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            };
 
-        mealUiModels.add(new MealUiModel("Lasagna", "https://www.themealdb.com/images/media/meals/wtsvxx1511296896.jpg"));
+            etSearch.addTextChangedListener(watcher);
 
-        mealUiModels.add(new MealUiModel("Pancakes", "https://www.themealdb.com/images/media/meals/rwuyqx1511383174.jpg"));
+            emitter.setCancellable(() -> etSearch.removeTextChangedListener(watcher));
+        });
 
-        mealUiModels.add(new MealUiModel("Pad Thai", "https://www.themealdb.com/images/media/meals/1529444830.jpg"));
+        presenter.getSearchResult(searchObservable);
+    }
 
-        mealUiModels.add(new MealUiModel("Sushi Roll", "https://www.themealdb.com/images/media/meals/g046bb1663960946.jpg"));
+    @Override
+    public void showMeals(List<MealUiModel> meals) {
+        searchAdapter.setData(meals);
+    }
 
-        mealUiModels.add(new MealUiModel("Tacos", "https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg"));
+    @Override
+    public void showViews() {
+        searchResultRecycler.setVisibility(VISIBLE);
+    }
 
-        return mealUiModels;
+    @Override
+    public void hideViews() {
+        searchResultRecycler.setVisibility(GONE);
+    }
+
+    @Override
+    public void showLoading() {
+        loading.setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        loading.setVisibility(GONE);
+    }
+
+    @Override
+    public void showError(int messageId) {
+        CustomSnackBar.showSnackBar(requireView(), getContext().getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+    }
+
+    @Override
+    public void noInternet() {
+        noInternetLayout.setVisibility(VISIBLE);
     }
 }

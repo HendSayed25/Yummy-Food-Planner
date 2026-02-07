@@ -18,15 +18,21 @@ import java.util.List;
 public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.SearchMealViewHolder> {
 
     private List<MealUiModel> mealUiModels;
+    public onItemClickListener listener;
 
-    public SearchMealAdapter(List<MealUiModel> mealUiModels){
+    public SearchMealAdapter() {
+        listener = null;
+    }
+
+    public void setData(List<MealUiModel> mealUiModels) {
         this.mealUiModels = mealUiModels;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public SearchMealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_item, parent, false);
         return new SearchMealViewHolder(view);
     }
 
@@ -36,6 +42,12 @@ public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.Se
 
         holder.mealName.setText(mealUiModel.getName());
         GlideImageLoader.load(holder.itemView.getContext(), mealUiModel.getImageUrl(), holder.mealImage);
+
+        if (listener != null) {
+            holder.itemView.setOnClickListener(v -> {
+                listener.onItemClick(holder.mealName.getText().toString());
+            });
+        }
     }
 
     @Override
@@ -43,15 +55,20 @@ public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.Se
         return mealUiModels.size();
     }
 
-    public static class SearchMealViewHolder extends RecyclerView.ViewHolder{
+    public static class SearchMealViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mealImage;
         TextView mealName;
-        public SearchMealViewHolder(View view){
+
+        public SearchMealViewHolder(View view) {
             super(view);
 
             mealImage = view.findViewById(R.id.ivMealImageSearch);
             mealName = view.findViewById(R.id.tvMealNameSearch);
         }
+    }
+
+    public interface onItemClickListener {
+        void onItemClick(String name);
     }
 }

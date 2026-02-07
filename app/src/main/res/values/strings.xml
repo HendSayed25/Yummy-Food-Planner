@@ -48,4 +48,6 @@
     <string name="no_countries_found">No Countries Found now</string>
     <string name="no_categories_found">No Categories Found</string>
     <string name="no_ingredients_found">No Ingredients Found</string>
+    <string name="retry">Retry</string>
+    <string name="no_meals_for_today">No Meal for today</string>
 </resources>

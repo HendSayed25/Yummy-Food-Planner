@@ -6,7 +6,6 @@ import static android.view.View.VISIBLE;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +24,7 @@ import com.example.yummy_food_planner.presentation.search.presenter.SearchPresen
 import com.example.yummy_food_planner.presentation.search.utils.Filter;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
+import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -41,6 +42,7 @@ public class SearchFragment extends Fragment implements SearchViews {
     private ProgressBar loading;
     private View noInternetLayout;
     private SearchPresenter presenter;
+    private AppCompatButton retryBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class SearchFragment extends Fragment implements SearchViews {
         searchResultRecycler = view.findViewById(R.id.searchResultRecycler);
         loading = view.findViewById(R.id.loadingSearch);
         noInternetLayout = view.findViewById(R.id.noInternetLayoutSearch);
+        retryBtn = noInternetLayout.findViewById(R.id.retryButton);
         presenter = new SearchPresenterImp(this, getContext());
 
         chipCategory.setChecked(true);
@@ -68,6 +71,23 @@ public class SearchFragment extends Fragment implements SearchViews {
         setupChips();
 
         searchForMealByName();
+
+        retryBtn.setOnClickListener(v -> {
+            noInternetLayout.setVisibility(GONE);
+
+            if (NetworkCheck.isNetworkAvailable(requireContext())) {
+                if (chipCategory.isChecked()) {
+                    presenter.getAllCategories();
+                } else if (chipCountry.isChecked()) {
+                    presenter.getAllCountries();
+                } else {
+                    presenter.getAllIngredients();
+                }
+            } else {
+                noInternetLayout.setVisibility(VISIBLE);
+            }
+        });
+
 
         searchAdapter.listener = name -> {
             if (chipCategory.isChecked()) {
@@ -122,8 +142,6 @@ public class SearchFragment extends Fragment implements SearchViews {
             TextWatcher watcher = new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    Log.e("TAG", "text change");
-
                     emitter.onNext(s.toString());
                 }
 

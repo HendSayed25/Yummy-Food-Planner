@@ -4,7 +4,6 @@ import static com.example.yummy_food_planner.presentation.search.utils.FlagsUtil
 import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.mapToUiList;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.Pair;
 
 import com.example.yummy_food_planner.R;
@@ -18,6 +17,7 @@ import com.example.yummy_food_planner.presentation.search.view.SearchViews;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -82,17 +82,26 @@ public class SearchPresenterImp implements SearchPresenter {
                 searchObservable
                         .debounce(300, TimeUnit.MILLISECONDS)
                         .distinctUntilChanged()
-                        .switchMap(text ->
-                                mealRepository.getMealByName(text)
-                                        .subscribeOn(Schedulers.io())
-                                        .map(response -> new Pair<>(text, response))
-                        )
+                        .switchMap(text -> {
+                            if (!NetworkCheck.isNetworkAvailable(context)) {
+                                return Observable.just(new Pair<>(text, null));
+                            }
+                            return mealRepository.getMealByName(text)
+                                    .subscribeOn(Schedulers.io())
+                                    .map(response -> new Pair<>(text, response))
+                                    .onErrorReturnItem(new Pair<>(text, null));
+                        })
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 pair -> {
 
+                                    if (pair.second == null) {
+                                        view.noInternet();
+                                        return;
+                                    }
+
                                     String searchText = pair.first;
-                                    MealResponse response = pair.second;
+                                    MealResponse response = (MealResponse) pair.second;
 
                                     if (searchText.isEmpty()) {
                                         view.showMeals(originalList);
@@ -105,8 +114,11 @@ public class SearchPresenterImp implements SearchPresenter {
 
                                 },
                                 error -> {
-                                    view.showError(R.string.no_meals_found_with_this_name);
-                                    Log.e("TAG", error.getMessage());
+                                    if (error instanceof IOException) {
+                                        view.noInternet();
+                                    } else {
+                                        view.showError(R.string.no_meals_found_with_this_name);
+                                    }
                                 }
                         )
         );
@@ -169,9 +181,12 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = countries;
                                 },
                                 error -> {
-                                    view.hideLoading();
-                                    view.showError(R.string.no_countries_found);
-                                    Log.e("ERROR", error.getMessage());
+                                    if (error instanceof IOException) {
+                                        view.noInternet();
+                                    } else {
+                                        view.hideLoading();
+                                        view.showError(R.string.no_countries_found);
+                                    }
                                 }
                         )
         );
@@ -206,9 +221,12 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = categories;
                                 },
                                 error -> {
-                                    view.hideLoading();
-                                    view.showError(R.string.no_categories_found);
-                                    Log.e("ERROR", error.getMessage());
+                                    if (error instanceof IOException) {
+                                        view.noInternet();
+                                    } else {
+                                        view.hideLoading();
+                                        view.showError(R.string.no_categories_found);
+                                    }
                                 }
                         )
         );
@@ -233,7 +251,7 @@ public class SearchPresenterImp implements SearchPresenter {
                                 response -> {
                                     view.hideLoading();
                                     view.showViews();
-                                    List<MealUiModel> ingredients =  mapToUiList(
+                                    List<MealUiModel> ingredients = mapToUiList(
                                             response.getMeals(),
                                             ingredient -> new MealUiModel(
                                                     ingredient.getName(),
@@ -244,9 +262,12 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = ingredients;
                                 },
                                 error -> {
-                                    view.hideLoading();
-                                    view.showError(R.string.no_ingredients_found);
-                                    Log.e("ERROR", error.getMessage());
+                                    if (error instanceof IOException) {
+                                        view.noInternet();
+                                    } else {
+                                        view.hideLoading();
+                                        view.showError(R.string.no_ingredients_found);
+                                    }
                                 }
                         )
         );
@@ -283,9 +304,12 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = meals;
                                 },
                                 error -> {
-                                    view.hideLoading();
-                                    view.showError(errorMessage);
-                                    Log.e("ERROR", error.getMessage());
+                                    if (error instanceof IOException) {
+                                        view.noInternet();
+                                    } else {
+                                        view.hideLoading();
+                                        view.showError(errorMessage);
+                                    }
                                 }
                         )
         );

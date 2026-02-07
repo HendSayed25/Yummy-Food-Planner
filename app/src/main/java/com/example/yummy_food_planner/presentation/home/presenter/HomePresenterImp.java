@@ -4,17 +4,16 @@ import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.m
 import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.mapToUiList;
 
 import android.content.Context;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
+import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealRepository;
 import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.presentation.home.model.RandomMealUiModel;
 import com.example.yummy_food_planner.presentation.home.view.HomeView;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
+
+import java.io.IOException;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -55,8 +54,11 @@ public class HomePresenterImp implements HomePresenter {
                                                 )));
                                     },
                                     error -> {
-                                        view.showError("No Meal for today");
-                                        Log.e("TAG", error.getMessage());
+                                        if (error instanceof IOException) {
+                                            view.noInternet();
+                                        } else {
+                                            view.showError(R.string.no_meals_for_today);
+                                        }
                                     }
                             )
             );
@@ -87,10 +89,12 @@ public class HomePresenterImp implements HomePresenter {
                                                 )));
                                     },
                                     error -> {
-                                        view.hideLoading();
-                                        view.showViews();
-                                        view.showError("No Meal for today");
-                                        Log.e("TAG", error.getMessage());
+                                        if (error instanceof IOException) {
+                                            view.noInternet();
+                                        } else {
+                                            view.hideLoading();
+                                            view.showError(R.string.no_meals_for_today);
+                                        }
                                     }
                             )
             );

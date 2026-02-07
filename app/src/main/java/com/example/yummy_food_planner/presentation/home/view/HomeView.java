@@ -10,7 +10,7 @@ public interface HomeView {
     void showMeals(List<MealUiModel> mealUiModels);
     void noInternet();
     void showViews();
-    void showError(String message);
+    void showError(int messageId);
     void showLoading();
     void hideLoading();
     void hideViews();

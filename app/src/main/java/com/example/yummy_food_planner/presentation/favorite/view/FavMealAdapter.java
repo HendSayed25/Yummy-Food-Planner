@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.presentation.shared.model.Meal;
+import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.GlideImageLoader;
 
 import java.util.List;
 
 public class FavMealAdapter extends RecyclerView.Adapter<FavMealAdapter.FavMealViewHolder> {
 
-    private List<Meal> favMeals;
+    private List<MealUiModel> favMealUiModels;
 
-    public FavMealAdapter(List<Meal> favMeals) {
-        this.favMeals = favMeals;
+    public FavMealAdapter(List<MealUiModel> favMealUiModels) {
+        this.favMealUiModels = favMealUiModels;
     }
 
     public static class FavMealViewHolder extends RecyclerView.ViewHolder {
@@ -44,14 +44,14 @@ public class FavMealAdapter extends RecyclerView.Adapter<FavMealAdapter.FavMealV
 
     @Override
     public void onBindViewHolder(@NonNull FavMealViewHolder holder, int position) {
-        Meal favMeal = favMeals.get(position);
+        MealUiModel favMealUiModel = favMealUiModels.get(position);
 
-        holder.mealName.setText(favMeal.getName());
-        GlideImageLoader.load(holder.itemView.getContext(), favMeal.getImageUrl(), holder.mealImage);
+        holder.mealName.setText(favMealUiModel.getName());
+        GlideImageLoader.load(holder.itemView.getContext(), favMealUiModel.getImageUrl(), holder.mealImage);
     }
 
     @Override
     public int getItemCount() {
-        return favMeals.size();
+        return favMealUiModels.size();
     }
 }

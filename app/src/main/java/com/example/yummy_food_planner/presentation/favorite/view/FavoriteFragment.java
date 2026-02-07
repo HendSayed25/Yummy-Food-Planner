@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.presentation.shared.model.Meal;
+import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,18 +37,18 @@ public class FavoriteFragment extends Fragment {
         favRecycler.setAdapter(favMealAdapter);
     }
 
-    private List<Meal> getMeals(){
-        List<Meal> meals = new ArrayList<>();
+    private List<MealUiModel> getMeals(){
+        List<MealUiModel> mealUiModels = new ArrayList<>();
 
-        meals.add(new Meal("Spaghetti Carbonara",
+        mealUiModels.add(new MealUiModel("Spaghetti Carbonara",
                 "https://tse1.mm.bing.net/th/id/OIP.3f4uw03GjHN2wa2tSeNc4wHaIu?rs=1&pid=ImgDetMain&o=7&rm=3"));
 
-        meals.add(new Meal("Chicken Tikka",
+        mealUiModels.add(new MealUiModel("Chicken Tikka",
                 "https://images.pexels.com/photos/7593252/pexels-photo-7593252.jpeg?cs=srgb&dl=pexels-ahmad-no-more-7593252.jpg&fm=jpg"));
 
-        meals.add(new Meal( "Greek Salad",
+        mealUiModels.add(new MealUiModel( "Greek Salad",
                 "https://t4.ftcdn.net/jpg/03/97/74/85/360_F_397748564_dGlYErHROD7bxSDsZFkQODn0asgWfBv8.jpg"));
 
-        return meals;
+        return mealUiModels;
     }
 }

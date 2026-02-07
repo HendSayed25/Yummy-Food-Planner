@@ -10,17 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.presentation.shared.model.Meal;
+import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.GlideImageLoader;
 
 import java.util.List;
 
 public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.SearchMealViewHolder> {
 
-    private List<Meal> meals;
+    private List<MealUiModel> mealUiModels;
 
-    public SearchMealAdapter(List<Meal> meals){
-        this.meals = meals;
+    public SearchMealAdapter(List<MealUiModel> mealUiModels){
+        this.mealUiModels = mealUiModels;
     }
 
     @NonNull
@@ -32,15 +32,15 @@ public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.Se
 
     @Override
     public void onBindViewHolder(@NonNull SearchMealViewHolder holder, int position) {
-        Meal meal = meals.get(position);
+        MealUiModel mealUiModel = mealUiModels.get(position);
 
-        holder.mealName.setText(meal.getName());
-        GlideImageLoader.load(holder.itemView.getContext(), meal.getImageUrl(), holder.mealImage);
+        holder.mealName.setText(mealUiModel.getName());
+        GlideImageLoader.load(holder.itemView.getContext(), mealUiModel.getImageUrl(), holder.mealImage);
     }
 
     @Override
     public int getItemCount() {
-        return meals.size();
+        return mealUiModels.size();
     }
 
     public static class SearchMealViewHolder extends RecyclerView.ViewHolder{

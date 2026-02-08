@@ -158,15 +158,15 @@ public class SearchPresenterImp implements SearchPresenter {
                                 response -> {
                                     view.hideLoading();
                                     view.showViews();
-                                    List<MealUiModel> meals = mapToUiList(
+                                    List<MealUiModel> countries = mapToUiList(
                                             response.getMeals(),
                                             country -> new MealUiModel(
                                                     country.getAreaName(),
                                                     getFlagUrl(country.getAreaName())
                                             )
                                     );
-                                    view.showMeals(meals);
-                                    originalList = meals;
+                                    view.showMeals(countries);
+                                    originalList = countries;
                                 },
                                 error -> {
                                     view.hideLoading();
@@ -195,15 +195,15 @@ public class SearchPresenterImp implements SearchPresenter {
                                 response -> {
                                     view.hideLoading();
                                     view.showViews();
-                                    List<MealUiModel> meals = mapToUiList(
+                                    List<MealUiModel> categories = mapToUiList(
                                             response.getCategories(),
                                             category -> new MealUiModel(
                                                     category.getName(),
                                                     category.getImage()
                                             )
                                     );
-                                    view.showMeals(meals);
-                                    originalList = meals;
+                                    view.showMeals(categories);
+                                    originalList = categories;
                                 },
                                 error -> {
                                     view.hideLoading();
@@ -233,15 +233,15 @@ public class SearchPresenterImp implements SearchPresenter {
                                 response -> {
                                     view.hideLoading();
                                     view.showViews();
-                                    view.showMeals(
-                                            mapToUiList(
-                                                    response.getMeals(),
-                                                    ingredient -> new MealUiModel(
-                                                            ingredient.getName(),
-                                                            ingredient.getThumb()
-                                                    )
+                                    List<MealUiModel> ingredients =  mapToUiList(
+                                            response.getMeals(),
+                                            ingredient -> new MealUiModel(
+                                                    ingredient.getName(),
+                                                    ingredient.getThumb()
                                             )
                                     );
+                                    view.showMeals(ingredients);
+                                    originalList = ingredients;
                                 },
                                 error -> {
                                     view.hideLoading();

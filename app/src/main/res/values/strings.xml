@@ -50,4 +50,10 @@
     <string name="no_ingredients_found">No Ingredients Found</string>
     <string name="retry">Retry</string>
     <string name="no_meals_for_today">No Meal for today</string>
+    <string name="category_image">Category image</string>
+    <string name="add_to_favorite_icon">add to favorite icon</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="ingredient_image">ingredient image</string>
+    <string name="instructions">Instructions</string>
+    <string name="youtube">Youtube :</string>
 </resources>

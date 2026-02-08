@@ -3,22 +3,19 @@ package com.example.yummy_food_planner.presentation.home.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.home.model.RandomMealUiModel;
@@ -27,8 +24,8 @@ import com.example.yummy_food_planner.presentation.home.presenter.HomePresenterI
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.example.yummy_food_planner.presentation.shared.utils.GlideImageLoader;
+import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements HomeView {
@@ -42,6 +39,7 @@ public class HomeFragment extends Fragment implements HomeView {
     private ImageView logoIcon;
     private ProgressBar loading;
     private HomePresenter presenter;
+    private AppCompatButton retryBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +52,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
         mealOfDay = view.findViewById(R.id.mealOfDay);
         noInternetLayout = view.findViewById(R.id.noInternetLayout);
+        retryBtn = noInternetLayout.findViewById(R.id.retryButton);
         mealRecycler = view.findViewById(R.id.mealsHomeRecycler);
         homeTitle1 = view.findViewById(R.id.title1);
         homeTitle2 = view.findViewById(R.id.home_title2);
@@ -63,10 +62,18 @@ public class HomeFragment extends Fragment implements HomeView {
         presenter = new HomePresenterImp(this, getContext());
         homeMealAdapter = new HomeMealAdapter();
 
-
         presenter.getRandomMeal();
         presenter.getMealsByLetter("e");
 
+        retryBtn.setOnClickListener(v -> {
+            noInternetLayout.setVisibility(GONE);
+            if (NetworkCheck.isNetworkAvailable(requireContext())) {
+                presenter.getRandomMeal();
+                presenter.getMealsByLetter("e");
+            }else{
+                noInternetLayout.setVisibility(VISIBLE);
+            }
+        });
     }
 
     @Override
@@ -102,8 +109,8 @@ public class HomeFragment extends Fragment implements HomeView {
     }
 
     @Override
-    public void showError(String message) {
-        CustomSnackBar.showSnackBar(requireView(), message, getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+    public void showError(int messageId) {
+        CustomSnackBar.showSnackBar(requireView(),getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
 
     @Override

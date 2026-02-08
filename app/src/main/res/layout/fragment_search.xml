@@ -112,6 +112,7 @@
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/filterChipsLayout"
         app:spanCount="2"
+        android:layout_marginBottom="10dp"
         tools:listitem="@layout/search_item" />
 
     <include

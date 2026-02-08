@@ -26,8 +26,6 @@
     <string name="already_have_an_account">Already have an account?</string>
     <string name="continue_as_a_guest">Continue as a Guest</string>
     <string name="google">Google</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logo_ic_home">logo ic home</string>
     <string name="let_s_make_today_delicious">Let\'s make today delicious!</string>
     <string name="today_s_yummy_suggestion">Today\'s yummy suggestion :</string>
@@ -43,5 +41,11 @@
     <string name="country">Country</string>
     <string name="no_internet">No Internet connection</string>
     <string name="failed_to_get_google_account">Failed to get Google account</string>
-
+    <string name="no_meals_found_for_this_country">No Meals Found for this Country</string>
+    <string name="no_meals_found_for_this_category">No Meals Found for this Category</string>
+    <string name="no_meals_found_for_this_ingredient">No Meals Found for this Ingredient</string>
+    <string name="no_meals_found_with_this_name">No Meals Found with this name</string>
+    <string name="no_countries_found">No Countries Found now</string>
+    <string name="no_categories_found">No Categories Found</string>
+    <string name="no_ingredients_found">No Ingredients Found</string>
 </resources>

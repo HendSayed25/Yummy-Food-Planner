@@ -56,4 +56,5 @@
     <string name="ingredient_image">ingredient image</string>
     <string name="instructions">Instructions</string>
     <string name="youtube">Youtube :</string>
+    <string name="failure_loading_meal_details">Error occurred please try again</string>
 </resources>

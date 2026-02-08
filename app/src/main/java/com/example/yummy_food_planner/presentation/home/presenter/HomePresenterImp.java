@@ -50,7 +50,8 @@ public class HomePresenterImp implements HomePresenter {
                                                 m -> new RandomMealUiModel(
                                                         m.getStrMeal(),
                                                         m.getStrCategory(),
-                                                        m.getStrMealThumb()
+                                                        m.getStrMealThumb(),
+                                                        m.getIdMeal()
                                                 )));
                                     },
                                     error -> {
@@ -85,7 +86,8 @@ public class HomePresenterImp implements HomePresenter {
                                         view.showMeals(mapToUiList(meals.getMeals(),
                                                 m -> new MealUiModel(
                                                         m.getStrMeal(),
-                                                        m.getStrMealThumb()
+                                                        m.getStrMealThumb(),
+                                                        m.getIdMeal()
                                                 )));
                                     },
                                     error -> {

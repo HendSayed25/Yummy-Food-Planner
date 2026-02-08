@@ -1,5 +1,6 @@
 package com.example.yummy_food_planner.presentation.home.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,11 @@ import java.util.List;
 public class HomeMealAdapter extends RecyclerView.Adapter<HomeMealAdapter.MealViewHolder> {
 
     private List<MealUiModel> mealUiModels;
-    public void setData(List<MealUiModel> mealUiModels){
+    public onItemClickListener listener;
+
+    public void setData(List<MealUiModel> mealUiModels) {
         this.mealUiModels = mealUiModels;
+        listener = null;
         notifyDataSetChanged();
     }
 
@@ -33,8 +37,14 @@ public class HomeMealAdapter extends RecyclerView.Adapter<HomeMealAdapter.MealVi
     @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
         MealUiModel mealUiModel = mealUiModels.get(position);
-        GlideImageLoader.load(holder.itemView.getContext(),mealUiModel.getImageUrl(),holder.mealImage);
+        GlideImageLoader.load(holder.itemView.getContext(), mealUiModel.getImageUrl(), holder.mealImage);
         holder.mealName.setText(mealUiModel.getName());
+
+        if (listener != null) {
+            holder.itemView.setOnClickListener(v -> {
+                listener.onItemClick(mealUiModel.getId(), v);
+            });
+        }
     }
 
     @Override
@@ -51,5 +61,9 @@ public class HomeMealAdapter extends RecyclerView.Adapter<HomeMealAdapter.MealVi
             mealImage = view.findViewById(R.id.ivMealImage);
             mealName = view.findViewById(R.id.tvMealName);
         }
+    }
+
+    public interface onItemClickListener {
+        void onItemClick(String id, View view);
     }
 }

@@ -1,11 +1,12 @@
 package com.example.yummy_food_planner.presentation.search.view;
 
+import com.example.yummy_food_planner.presentation.search.utils.RecyclerListType;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 
 import java.util.List;
 
 public interface SearchViews {
-    void showMeals(List<MealUiModel> meals);
+    void showMeals(List<MealUiModel> meals, RecyclerListType type);
     void showViews();
     void hideViews();
     void showLoading();

@@ -1,8 +1,12 @@
 package com.example.yummy_food_planner.data.meals.datasource.remote;
 
+import static com.example.yummy_food_planner.data.meals.utils.Constants.INGREDIENTS_IMAGES_BASE_URL;
+import static com.example.yummy_food_planner.data.meals.utils.Constants.INGREDIENT_IMAGE_END_POINT;
+
+import android.net.Uri;
+
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.AreaListResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.CategoriesResponse;
-import com.example.yummy_food_planner.data.meals.datasource.remote.response.CategoryListResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.FilterMealResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.IngredientsListResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
@@ -46,5 +50,12 @@ public class RemoteMealDataSource {
     }
     public Single<IngredientsListResponse> getAllIngredients(String i){
         return mealService.getMealIngredientsList(i);
+    }
+    public Single<MealResponse> getMealDetailsById(String mealId){
+        return mealService.getMealDetailsById(mealId);
+    }
+
+    public String getIngredientImageUrl(String ingredientName){
+        return "https://" + INGREDIENTS_IMAGES_BASE_URL + INGREDIENT_IMAGE_END_POINT +  Uri.encode(ingredientName.trim())+ ".png";
     }
 }

@@ -3,6 +3,7 @@ import org.gradle.kotlin.dsl.implementation
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
+    alias(libs.plugins.navigation.safeargs)
 }
 
 android {
@@ -61,9 +62,8 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.adapter.rxjava3)
 
-    //media3
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
+    //youtube video
+    implementation(libs.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

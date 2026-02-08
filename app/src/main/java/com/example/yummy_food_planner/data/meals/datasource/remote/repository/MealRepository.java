@@ -20,4 +20,6 @@ public interface MealRepository {
     Single<CategoriesResponse> getAllCategories();
     Single<AreaListResponse> getAllCountries(String c);
     Single<IngredientsListResponse> getAllIngredients(String i);
+    public Single<MealResponse> getMealDetailsById(String mealId);
+    public String getIngredientImageUrl(String ingredientName);
 }

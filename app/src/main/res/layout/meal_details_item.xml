@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/ivMealImageDetails"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="180dp"
             android:contentDescription="@string/meal_image"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@id/tvMealNameDetails"
@@ -57,9 +57,9 @@
             android:id="@+id/tvMealNameDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/poppins_bold"
-            android:textColor="@color/blue_dark"
+            android:textColor="@color/blue_primary"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
             android:id="@+id/linear1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -78,38 +78,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvMealNameDetails">
 
-            <ImageView
-                android:id="@+id/categoryImage"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_margin="5dp"
-                android:contentDescription="@string/category_image" />
 
             <TextView
                 android:id="@+id/tvMealCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/poppins_bold"
+                android:fontFamily="@font/poppins_semibold"
                 android:textColor="@color/blue_primary"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 tools:text="Desesrt" />
 
-            <ImageView
-                android:id="@+id/countryImage"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_margin="5dp"
-                android:contentDescription="@string/category_image" />
 
             <TextView
                 android:id="@+id/tvMealCountyr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/poppins_bold"
+                android:fontFamily="@font/poppins_semibold"
                 android:textColor="@color/blue_primary"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 tools:text="Egypt" />
 
         </LinearLayout>

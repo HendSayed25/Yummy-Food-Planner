@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.search.presenter.SearchPresenter;
 import com.example.yummy_food_planner.presentation.search.presenter.SearchPresenterImp;
 import com.example.yummy_food_planner.presentation.search.utils.Filter;
+import com.example.yummy_food_planner.presentation.search.utils.RecyclerListType;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
@@ -88,19 +90,9 @@ public class SearchFragment extends Fragment implements SearchViews {
             }
         });
 
-
-        searchAdapter.listener = name -> {
-            if (chipCategory.isChecked()) {
-                presenter.getMealsByCategory(name);
-                presenter.setFilter(Filter.CATEGORY, name);
-            } else if (chipCountry.isChecked()) {
-                presenter.getMealsByCountry(name);
-                presenter.setFilter(Filter.COUNTRY, name);
-
-            } else {
-                presenter.getMealsByIngredient(name);
-                presenter.setFilter(Filter.INGREDIENT, name);
-            }
+        searchAdapter.listener = (data, v) -> {
+            if (searchAdapter.getType() == RecyclerListType.CATEGORY) FilterByChips(data);
+            else navigateToMealsDetails(data, v);
         };
     }
 
@@ -111,6 +103,24 @@ public class SearchFragment extends Fragment implements SearchViews {
         searchAdapter = new SearchMealAdapter();
         searchAdapter.setData(Collections.emptyList());
         searchResultRecycler.setAdapter(searchAdapter);
+    }
+
+    private void FilterByChips(String name) {
+        if (chipCategory.isChecked()) {
+            presenter.getMealsByCategory(name);
+            presenter.setFilter(Filter.CATEGORY, name);
+        } else if (chipCountry.isChecked()) {
+            presenter.getMealsByCountry(name);
+            presenter.setFilter(Filter.COUNTRY, name);
+        } else {
+            presenter.getMealsByIngredient(name);
+            presenter.setFilter(Filter.INGREDIENT, name);
+        }
+    }
+
+    private void navigateToMealsDetails(String mealId, View v) {
+        SearchFragmentDirections.ActionSearchFragmentToMealDetailsFragment action = SearchFragmentDirections.actionSearchFragmentToMealDetailsFragment(mealId);
+        Navigation.findNavController(v).navigate(action);
     }
 
     private void setupChips() {
@@ -163,8 +173,9 @@ public class SearchFragment extends Fragment implements SearchViews {
     }
 
     @Override
-    public void showMeals(List<MealUiModel> meals) {
+    public void showMeals(List<MealUiModel> meals, RecyclerListType type) {
         searchAdapter.setData(meals);
+        searchAdapter.setType(type);
     }
 
     @Override

@@ -33,10 +33,10 @@ public class MealIngredientsAdapter extends RecyclerView.Adapter<MealIngredients
 
     @Override
     public void onBindViewHolder(@NonNull MealIngredientViewHolder holder, int position) {
-
         IngredientUiModel ingredient = ingredients.get(position);
 
         holder.ingredientName.setText(ingredient.getName());
+        holder.ingredientMeasure.setText(ingredient.getMeasure());
         GlideImageLoader.load(holder.itemView.getContext(), ingredient.getImageUrl(), holder.ingredientImage);
     }
 
@@ -48,12 +48,13 @@ public class MealIngredientsAdapter extends RecyclerView.Adapter<MealIngredients
     public static class MealIngredientViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ingredientImage;
-        TextView ingredientName;
+        TextView ingredientName, ingredientMeasure;
 
         public MealIngredientViewHolder(View view) {
             super(view);
             ingredientImage = view.findViewById(R.id.ingredientImage);
             ingredientName = view.findViewById(R.id.ingredientName);
+            ingredientMeasure = view.findViewById(R.id.ingredientMeasure);
         }
     }
 }

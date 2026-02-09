@@ -63,4 +63,14 @@ public class MealsRepositoryImp implements MealRepository{
     public Single<IngredientsListResponse> getAllIngredients(String i) {
         return remoteMealDataSource.getAllIngredients(i);
     }
+
+    @Override
+    public Single<MealResponse> getMealDetailsById(String mealId) {
+        return remoteMealDataSource.getMealDetailsById(mealId);
+    }
+
+    @Override
+    public String getIngredientImageUrl(String ingredientName) {
+        return remoteMealDataSource.getIngredientImageUrl(ingredientName);
+    }
 }

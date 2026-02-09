@@ -4,11 +4,17 @@ public class RandomMealUiModel {
     private String name;
     private String description;
     private String imageUrl;
+    private String id;
 
-    public RandomMealUiModel(String name, String description, String imageUrl) {
+    public RandomMealUiModel(String name, String description, String imageUrl,String id) {
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {

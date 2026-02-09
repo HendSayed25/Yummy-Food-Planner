@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
@@ -70,10 +72,15 @@ public class HomeFragment extends Fragment implements HomeView {
             if (NetworkCheck.isNetworkAvailable(requireContext())) {
                 presenter.getRandomMeal();
                 presenter.getMealsByLetter("e");
-            }else{
+            } else {
                 noInternetLayout.setVisibility(VISIBLE);
             }
         });
+    }
+
+    private void navigateToMealDetails(String id, View view) {
+        HomeFragmentDirections.ActionHomeFragmentToMealDetailsFragment action = HomeFragmentDirections.actionHomeFragmentToMealDetailsFragment(id);
+        Navigation.findNavController(view).navigate(action);
     }
 
     @Override
@@ -84,12 +91,17 @@ public class HomeFragment extends Fragment implements HomeView {
         TextView mealDescription = mealOfDay.findViewById(R.id.tvMealDescription);
         mealName.setText(meal.getName());
         mealDescription.setText(meal.getDescription());
+
+        mealOfDay.setOnClickListener(view -> {
+            navigateToMealDetails(meal.getId(), view);
+        });
     }
 
     @Override
     public void showMeals(List<MealUiModel> mealUiModels) {
         homeMealAdapter.setData(mealUiModels);
         mealRecycler.setAdapter(homeMealAdapter);
+        homeMealAdapter.listener = this::navigateToMealDetails;
     }
 
     @Override
@@ -110,7 +122,7 @@ public class HomeFragment extends Fragment implements HomeView {
 
     @Override
     public void showError(int messageId) {
-        CustomSnackBar.showSnackBar(requireView(),getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+        CustomSnackBar.showSnackBar(requireView(), getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
 
     @Override

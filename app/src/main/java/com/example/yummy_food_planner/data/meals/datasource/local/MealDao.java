@@ -18,8 +18,10 @@ public interface MealDao {
 
     @Query("SELECT * FROM " + MEAL_TABLE_NAME)
     Observable<List<Meal>> getAllFavorite();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Completable addToFavorite(Meal meal);
-    @Delete
-    Completable deleteFromFavorite(Meal meal);
+    Completable addToFavorite(Meal meal, String userId);
+
+    @Query("DELETE FROM " + MEAL_TABLE_NAME + " WHERE id =:mealId AND userID= :userId")
+    Completable deleteFromFavorite(String mealId, String userId);
 }

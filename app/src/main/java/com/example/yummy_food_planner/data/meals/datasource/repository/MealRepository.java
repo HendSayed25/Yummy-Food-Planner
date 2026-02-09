@@ -2,7 +2,6 @@ package com.example.yummy_food_planner.data.meals.datasource.repository;
 
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.AreaListResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.CategoriesResponse;
-import com.example.yummy_food_planner.data.meals.datasource.remote.response.CategoryListResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.FilterMealResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.IngredientsListResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
@@ -42,11 +41,12 @@ public interface MealRepository {
 
     Observable<List<Plan>> getMealPlansByDate(Long date, String userId);
 
-    Completable addMealToFavorite(Meal meal, String userId);
+    Completable addMealToFavorite(Meal meal);
+    Single<Boolean> isMealFavorite(String mealId, String userId);
 
     Completable deleteMealFromFavorite(String mealId, String userId);
 
-    Completable addMealToPlan(Plan meal, Long date, String userId);
+    Completable addMealToPlan(Plan meal);
 
     Completable deleteMealFromPlan(String mealId, Long date, String userId);
 }

@@ -1,27 +1,40 @@
 package com.example.yummy_food_planner.presentation.favorite.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.presentation.favorite.presenter.FavoritePresenter;
+import com.example.yummy_food_planner.presentation.favorite.presenter.FavoritePresenterImp;
+import com.example.yummy_food_planner.presentation.home.view.HomeFragmentDirections;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
+import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment implements FavoriteView {
 
     private RecyclerView favRecycler;
     private FavMealAdapter favMealAdapter;
-
+    private FavoritePresenter presenter;
+    private TextView screenTitle;
+    private LinearLayout noFavoritesLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,23 +46,57 @@ public class FavoriteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         favRecycler = view.findViewById(R.id.favoriteRecycler);
-        favMealAdapter = new FavMealAdapter(getMeals());
-        favRecycler.setAdapter(favMealAdapter);
+        screenTitle = view.findViewById(R.id.favoriteTitle);
+        noFavoritesLayout = view.findViewById(R.id.empty_list);
+        favMealAdapter = new FavMealAdapter();
+        presenter = new FavoritePresenterImp(getContext(), this);
+
+        presenter.showAllFavorites();
+
+        favMealAdapter.listener = new FavMealAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(String id, View v) {
+                if (NetworkCheck.isNetworkAvailable(getContext())) {
+                    navigateToMealDetails(id, v);
+                } else {
+                    CustomSnackBar.showSnackBar(requireView(), getString(R.string.no_internet_fav), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+                }
+            }
+
+            @Override
+            public void onFavIconClick(String id, View v) {
+                presenter.removeFromFavorite(id, "");////////////////////////////
+            }
+        };
     }
 
-    private List<MealUiModel> getMeals(){
-        List<MealUiModel> mealUiModels = new ArrayList<>();
+    private void navigateToMealDetails(String id, View view) {
+        FavoriteFragmentDirections.ActionFavoriteFragmentToMealDetailsFragment action = FavoriteFragmentDirections.actionFavoriteFragmentToMealDetailsFragment(id);
+        Navigation.findNavController(view).navigate(action);
+    }
 
-        mealUiModels.add(new MealUiModel("Spaghetti Carbonara",
-                "https://tse1.mm.bing.net/th/id/OIP.3f4uw03GjHN2wa2tSeNc4wHaIu?rs=1&pid=ImgDetMain&o=7&rm=3",""));
+    @Override
+    public void showFavMeals(List<MealUiModel> meals) {
+        favMealAdapter.setData(meals);
+        favRecycler.setAdapter(favMealAdapter);
 
-        mealUiModels.add(new MealUiModel("Chicken Tikka",
-                "https://images.pexels.com/photos/7593252/pexels-photo-7593252.jpeg?cs=srgb&dl=pexels-ahmad-no-more-7593252.jpg&fm=jpg",""));
+        if(meals.isEmpty()){
+            screenTitle.setVisibility(GONE);
+            noFavoritesLayout.setVisibility(VISIBLE);
+        }else{
+            screenTitle.setVisibility(VISIBLE);
+            noFavoritesLayout.setVisibility(GONE);
+        }
+    }
 
+    @Override
+    public void showMessage(int messageId) {
+        CustomSnackBar.showSnackBar(requireView(), getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+    }
 
-        mealUiModels.add(new MealUiModel( "Greek Salad",
-                "https://t4.ftcdn.net/jpg/03/97/74/85/360_F_397748564_dGlYErHROD7bxSDsZFkQODn0asgWfBv8.jpg",""));
-
-        return mealUiModels;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

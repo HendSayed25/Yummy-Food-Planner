@@ -4,21 +4,19 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.media3.common.MediaItem;
-import androidx.media3.exoplayer.ExoPlayer;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.meal.model.IngredientUiModel;
@@ -38,8 +36,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
     private RecyclerView recyclerView;
     private MealIngredientsAdapter adapter;
-    private ExoPlayer player;
-    private MediaItem mediaItem;
     private ImageView mealImage, addToFav, addToCalender;
     private TextView mealName, mealCategory, mealCountry, mealInstructions, youtubeSectionTitle, ingredientTitle, instructionTitle;
     private View noInternetLayout;
@@ -47,6 +43,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     private MealDetailsPresenter presenter;
     private CardView mealCard;
     private YouTubePlayerView playerView;
+    private YouTubePlayer myYouTubePlayer = null;
+    private MealDetailsUiModel currentMeal;
+    private boolean isFavorite = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,13 +73,19 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         youtubeSectionTitle = view.findViewById(R.id.tvYoutubeTitle);
 
         adapter = new MealIngredientsAdapter();
-        player = new ExoPlayer.Builder(requireContext()).build();
         presenter = new MealDetailsPresenterImp(getContext(), this);
 
         if (getArguments() != null) {
             String mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
             presenter.getMealDetailsById(mealId);
+            presenter.checkIfFavorite(mealId, "");
         }
+
+        playerView.setOnClickListener(v -> {
+            if (myYouTubePlayer != null) {
+                myYouTubePlayer.play();
+            }
+        });
     }
 
     @Override
@@ -91,13 +96,21 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
     @Override
     public void showMealDetails(MealDetailsUiModel meal) {
+        currentMeal = meal;
         mealName.setText(meal.getName());
         mealCountry.setText(meal.getCountry());
         mealCategory.append(meal.getCategory() + ", ");
         GlideImageLoader.load(requireContext(), meal.getMealImageUrl(), mealImage);
 
         addToFav.setOnClickListener(v -> {
-            presenter.addToFavorite(new MealUiModel(meal.getName(), meal.getMealImageUrl(), meal.getId()));
+            isFavorite = !isFavorite;
+            updateHeartIcon(isFavorite);
+
+            if (isFavorite) {
+                presenter.addToFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
+            } else {
+                presenter.removeFromFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
+            }
         });
 
         addToCalender.setOnClickListener(v -> {
@@ -115,7 +128,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         playerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(videoId, 0);
+                myYouTubePlayer = youTubePlayer;
+                myYouTubePlayer.cueVideo(videoId, 0);
             }
         });
     }
@@ -163,8 +177,30 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     }
 
     @Override
+    public void addedToFav() {
+        addToFav.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_red_heart));
+    }
+
+    @Override
+    public void removeFromFav() {
+        addToFav.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_white_heart)); ////////////// white heart
+    }
+
+    private void updateHeartIcon(boolean isFav) {
+        if (isFav) {
+            addToFav.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_red_heart));
+        } else {
+            addToFav.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_white_heart));
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+
+        if (playerView != null) {
+            playerView.release();
+        }
     }
 }

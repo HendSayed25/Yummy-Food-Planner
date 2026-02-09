@@ -3,10 +3,11 @@ package com.example.yummy_food_planner.presentation.meal.presenter;
 import android.content.Context;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
-import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
 import com.example.yummy_food_planner.data.model.MealDto;
+import com.example.yummy_food_planner.data.model.entitiy.Meal;
 import com.example.yummy_food_planner.presentation.meal.model.IngredientUiModel;
 import com.example.yummy_food_planner.presentation.meal.model.MealDetailsUiModel;
 import com.example.yummy_food_planner.presentation.meal.view.MealDetailsView;
@@ -61,7 +62,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                                         view.noInternet();
                                     } else {
                                         view.hideLoading();
-                                        view.showError(R.string.failure_loading_meal_details);
+                                        view.showError(R.string.failure_loading);
                                     }
                                 }
                         )
@@ -70,12 +71,47 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
 
     @Override
     public void addToFavorite(MealUiModel meal) {
-        /// TODO save in room database
+        compositeDisposable.add(
+                repository.addMealToFavorite(new Meal(meal.getId(), "", meal.getName(), meal.getImageUrl())).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> view.addedToFav(),
+                                error -> view.showError(R.string.failure_loading)
+                        )
+        );
+    }
+
+    @Override
+    public void removeFromFavorite(MealUiModel meal) {
+        compositeDisposable.add(
+                repository.deleteMealFromFavorite(meal.getId(), "").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) /// ////////////////user id
+                        .subscribe(
+                                () -> view.removeFromFav(),
+                                error -> view.showError(R.string.failure_loading)
+                        ) ///TODO get userID
+        );
     }
 
     @Override
     public void addToCalender(MealUiModel meal) {
         /// TODO save to calender
+    }
+
+    @Override
+    public void checkIfFavorite(String mealId, String userId) {
+        compositeDisposable.add(
+                repository.isMealFavorite(mealId, userId)
+                        .subscribe(
+                                isFav -> {
+                                    if (isFav) {
+                                        view.addedToFav();
+                                    } else {
+                                        view.removeFromFav();
+                                    }
+                                },
+                                throwable -> view.showError(R.string.failure_loading)
+                        )
+
+        );
     }
 
     private void extractDetails(MealResponse meal) {
@@ -84,6 +120,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
         view.showMealVideo(getYouTubeId(meal.getMeals().get(0).getStrYoutube()));
         getMealDetails(meal);
     }
+
     private String getYouTubeId(String url) {
         Pattern pattern = Pattern.compile("v=([a-zA-Z0-9_-]+)");
         Matcher matcher = pattern.matcher(url);
@@ -115,6 +152,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
             view.showIngredients(ingredients);
         } catch (Exception e) {
             e.printStackTrace();
+            view.showError(R.string.failure_loading);
         }
     }
 

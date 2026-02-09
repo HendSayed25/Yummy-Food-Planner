@@ -7,8 +7,8 @@ import android.content.Context;
 import android.util.Pair;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealRepository;
-import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealsRepositoryImp;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.FilterMealResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
 import com.example.yummy_food_planner.data.model.MealDto;
@@ -44,7 +44,7 @@ public class SearchPresenterImp implements SearchPresenter {
     public SearchPresenterImp(SearchViews view, Context context) {
         this.view = view;
         this.context = context;
-        mealRepository = new MealsRepositoryImp();
+        mealRepository = new MealsRepositoryImp(context);
         compositeDisposable = new CompositeDisposable();
         originalList = new ArrayList<>();
     }

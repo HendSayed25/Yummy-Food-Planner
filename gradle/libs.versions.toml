@@ -14,7 +14,7 @@ glide = "5.0.5"
 constraintlayout = "2.2.1"
 media3Exoplayer = "1.9.2"
 media3Ui = "1.9.2"
-navigationFragment = "2.9.6"
+navigationFragment = "2.9.7"
 playServicesAuth = "21.5.0"
 rxandroid = "3.0.2"
 rxjava = "3.1.12"
@@ -50,4 +50,4 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-
+navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationFragment" }

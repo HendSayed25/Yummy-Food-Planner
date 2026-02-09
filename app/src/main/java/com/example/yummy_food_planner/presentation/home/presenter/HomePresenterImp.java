@@ -6,8 +6,8 @@ import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.m
 import android.content.Context;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealRepository;
-import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealsRepositoryImp;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.presentation.home.model.RandomMealUiModel;
 import com.example.yummy_food_planner.presentation.home.view.HomeView;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
@@ -29,7 +29,7 @@ public class HomePresenterImp implements HomePresenter {
     public HomePresenterImp(HomeView view, Context context) {
         this.view = view;
         this.context = context;
-        repository = new MealsRepositoryImp();
+        repository = new MealsRepositoryImp(context);
         compositeDisposable = new CompositeDisposable();
     }
 

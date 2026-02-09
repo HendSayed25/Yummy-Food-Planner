@@ -7,10 +7,10 @@ import java.util.List;
 
 @Entity(
         tableName = PLAN_TABLE_NAME,
-        primaryKeys = {"id", "userId", "date"}
+        primaryKeys = {"mealId", "userId", "date"}
 )
 public class Plan {
-    private int id;
+    private String mealId;
     private String userId;
     private Long date;
     private String name;
@@ -22,9 +22,9 @@ public class Plan {
     private List<String> ingredients;
     private List<String> measures;
 
-    public Plan(int id, String userId, Long date, String name, String category, String country, String instructions, String mealThumb, String video, List<String> ingredients, List<String> measures) {
-        this.id = id;
+    public Plan(String userId,String mealId, Long date, String name, String category, String country, String instructions, String mealThumb, String video, List<String> ingredients, List<String> measures) {
         this.userId = userId;
+        this.mealId = mealId;
         this.date = date;
         this.name = name;
         this.category = category;
@@ -36,10 +36,9 @@ public class Plan {
         this.measures = measures;
     }
 
-    public int getId() {
-        return id;
+    public String getMealId() {
+        return mealId;
     }
-
     public String getUserId() {
         return userId;
     }

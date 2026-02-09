@@ -11,7 +11,7 @@ import java.util.List;
         primaryKeys = {"id", "userId"}
 )
 public class Meal {
-    private int id;
+    private String id;
     private String userId;
     private String name;
     private String category;
@@ -22,7 +22,7 @@ public class Meal {
     private List<String> ingredients;
     private List<String> measures;
 
-    public Meal(int id, String userId, String name, String category, String country, String instructions, String mealThumb, String video, List<String> ingredients, List<String> measures) {
+    public Meal(String id, String userId, String name, String category, String country, String instructions, String mealThumb, String video, List<String> ingredients, List<String> measures) {
         this.id = id;
         this.userId = userId;
         this.name = name;
@@ -35,7 +35,7 @@ public class Meal {
         this.measures = measures;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

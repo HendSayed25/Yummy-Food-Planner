@@ -3,8 +3,8 @@ package com.example.yummy_food_planner.presentation.meal.presenter;
 import android.content.Context;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealRepository;
-import com.example.yummy_food_planner.data.meals.datasource.remote.repository.MealsRepositoryImp;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
 import com.example.yummy_food_planner.data.model.MealDto;
 import com.example.yummy_food_planner.presentation.meal.model.IngredientUiModel;
@@ -35,7 +35,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
         this.context = context;
         this.view = view;
         compositeDisposable = new CompositeDisposable();
-        repository = new MealsRepositoryImp();
+        repository = new MealsRepositoryImp(context);
     }
 
     @Override

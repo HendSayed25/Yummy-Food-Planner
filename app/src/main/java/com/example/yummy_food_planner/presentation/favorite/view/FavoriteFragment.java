@@ -41,13 +41,14 @@ public class FavoriteFragment extends Fragment {
         List<MealUiModel> mealUiModels = new ArrayList<>();
 
         mealUiModels.add(new MealUiModel("Spaghetti Carbonara",
-                "https://tse1.mm.bing.net/th/id/OIP.3f4uw03GjHN2wa2tSeNc4wHaIu?rs=1&pid=ImgDetMain&o=7&rm=3"));
+                "https://tse1.mm.bing.net/th/id/OIP.3f4uw03GjHN2wa2tSeNc4wHaIu?rs=1&pid=ImgDetMain&o=7&rm=3",""));
 
         mealUiModels.add(new MealUiModel("Chicken Tikka",
-                "https://images.pexels.com/photos/7593252/pexels-photo-7593252.jpeg?cs=srgb&dl=pexels-ahmad-no-more-7593252.jpg&fm=jpg"));
+                "https://images.pexels.com/photos/7593252/pexels-photo-7593252.jpeg?cs=srgb&dl=pexels-ahmad-no-more-7593252.jpg&fm=jpg",""));
+
 
         mealUiModels.add(new MealUiModel( "Greek Salad",
-                "https://t4.ftcdn.net/jpg/03/97/74/85/360_F_397748564_dGlYErHROD7bxSDsZFkQODn0asgWfBv8.jpg"));
+                "https://t4.ftcdn.net/jpg/03/97/74/85/360_F_397748564_dGlYErHROD7bxSDsZFkQODn0asgWfBv8.jpg",""));
 
         return mealUiModels;
     }

@@ -13,6 +13,7 @@ import com.example.yummy_food_planner.data.meals.datasource.remote.response.Filt
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
 import com.example.yummy_food_planner.data.model.MealDto;
 import com.example.yummy_food_planner.presentation.search.utils.Filter;
+import com.example.yummy_food_planner.presentation.search.utils.RecyclerListType;
 import com.example.yummy_food_planner.presentation.search.view.SearchViews;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
@@ -104,13 +105,13 @@ public class SearchPresenterImp implements SearchPresenter {
                                     MealResponse response = (MealResponse) pair.second;
 
                                     if (searchText.isEmpty()) {
-                                        view.showMeals(originalList);
+                                        view.showMeals(originalList,RecyclerListType.MEAL);
                                         return;
                                     }
 
                                     List<MealDto> filtered = getList(response.getMeals(), searchText);
                                     view.showMeals(mapToUiList(filtered,
-                                            meal -> new MealUiModel(meal.getStrMeal(), meal.getStrMealThumb())));
+                                            meal -> new MealUiModel(meal.getStrMeal(), meal.getStrMealThumb(), meal.getIdMeal())), RecyclerListType.MEAL);
 
                                 },
                                 error -> {
@@ -174,10 +175,11 @@ public class SearchPresenterImp implements SearchPresenter {
                                             response.getMeals(),
                                             country -> new MealUiModel(
                                                     country.getAreaName(),
-                                                    getFlagUrl(country.getAreaName())
+                                                    getFlagUrl(country.getAreaName()),
+                                                    ""
                                             )
                                     );
-                                    view.showMeals(countries);
+                                    view.showMeals(countries,RecyclerListType.CATEGORY);
                                     originalList = countries;
                                 },
                                 error -> {
@@ -214,10 +216,11 @@ public class SearchPresenterImp implements SearchPresenter {
                                             response.getCategories(),
                                             category -> new MealUiModel(
                                                     category.getName(),
-                                                    category.getImage()
+                                                    category.getImage(),
+                                                    category.getId()
                                             )
                                     );
-                                    view.showMeals(categories);
+                                    view.showMeals(categories,RecyclerListType.CATEGORY);
                                     originalList = categories;
                                 },
                                 error -> {
@@ -255,10 +258,11 @@ public class SearchPresenterImp implements SearchPresenter {
                                             response.getMeals(),
                                             ingredient -> new MealUiModel(
                                                     ingredient.getName(),
-                                                    ingredient.getThumb()
+                                                    ingredient.getThumb(),
+                                                    ingredient.getId()
                                             )
                                     );
-                                    view.showMeals(ingredients);
+                                    view.showMeals(ingredients,RecyclerListType.CATEGORY);
                                     originalList = ingredients;
                                 },
                                 error -> {
@@ -297,10 +301,11 @@ public class SearchPresenterImp implements SearchPresenter {
                                             response.getMeals(),
                                             meal -> new MealUiModel(
                                                     meal.getName(),
-                                                    meal.getImage()
+                                                    meal.getImage(),
+                                                    meal.getIdMeal()
                                             )
                                     );
-                                    view.showMeals(meals);
+                                    view.showMeals(meals,RecyclerListType.MEAL);
                                     originalList = meals;
                                 },
                                 error -> {

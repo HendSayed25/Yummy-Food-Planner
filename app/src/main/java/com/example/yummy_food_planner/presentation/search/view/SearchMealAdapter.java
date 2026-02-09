@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.presentation.search.utils.RecyclerListType;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.GlideImageLoader;
 
@@ -19,14 +20,11 @@ public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.Se
 
     private List<MealUiModel> mealUiModels;
     public onItemClickListener listener;
+    private RecyclerListType type;
 
     public SearchMealAdapter() {
         listener = null;
-    }
-
-    public void setData(List<MealUiModel> mealUiModels) {
-        this.mealUiModels = mealUiModels;
-        notifyDataSetChanged();
+        type = RecyclerListType.CATEGORY;
     }
 
     @NonNull
@@ -45,7 +43,8 @@ public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.Se
 
         if (listener != null) {
             holder.itemView.setOnClickListener(v -> {
-                listener.onItemClick(holder.mealName.getText().toString());
+                if (type == RecyclerListType.CATEGORY) listener.onItemClick(holder.mealName.getText().toString(),v);
+                else listener.onItemClick(mealUiModel.getId(),v);
             });
         }
     }
@@ -58,6 +57,7 @@ public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.Se
     public static class SearchMealViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mealImage;
+
         TextView mealName;
 
         public SearchMealViewHolder(View view) {
@@ -66,9 +66,23 @@ public class SearchMealAdapter extends RecyclerView.Adapter<SearchMealAdapter.Se
             mealImage = view.findViewById(R.id.ivMealImageSearch);
             mealName = view.findViewById(R.id.tvMealNameSearch);
         }
+
+    }
+
+    public RecyclerListType getType() {
+        return type;
+    }
+
+    public void setType(RecyclerListType type) {
+        this.type = type;
+    }
+
+    public void setData(List<MealUiModel> mealUiModels) {
+        this.mealUiModels = mealUiModels;
+        notifyDataSetChanged();
     }
 
     public interface onItemClickListener {
-        void onItemClick(String name);
+        void onItemClick(String data,View v);
     }
 }

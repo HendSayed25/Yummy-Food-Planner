@@ -62,9 +62,8 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.adapter.rxjava3)
 
-    //media3
-    implementation(libs.media3.exoplayer)
-    implementation(libs.media3.ui)
+    //youtube video
+    implementation(libs.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

@@ -2,6 +2,7 @@ package com.example.yummy_food_planner.presentation.authentication.signup.presen
 
 import android.content.Context;
 
+import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepository;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
 import com.example.yummy_food_planner.data.authentication.utils.Validator;
@@ -12,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -26,7 +28,7 @@ public class SignupPresenterImp implements SignupPresenter {
         this.view = view;
         this.context = context;
         this.compositeDisposable = new CompositeDisposable();
-        repository = new AuthRepositoryImp();
+        repository = new AuthRepositoryImp(context);
     }
 
     @Override
@@ -41,12 +43,15 @@ public class SignupPresenterImp implements SignupPresenter {
         }
 
         compositeDisposable.add(
-                repository.signup(email, password).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                repository.signup(email, password)
+                        .flatMapCompletable(user ->
+                                repository.saveUserData(user)
+                                        .andThen(repository.setLoggedIn())
+                                        .andThen(Completable.fromAction(() -> view.onSignupSuccess())))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                user -> {
-                                    repository.saveUserData(user);
-                                    view.onSignupSuccess();
-                                },
+                                () -> {},
                                 this::handleSignupError
                         )
         );
@@ -59,7 +64,7 @@ public class SignupPresenterImp implements SignupPresenter {
 
     private boolean isValidEmail(String email) {
         if (!Validator.isEmailValid(email)) {
-            view.showError("Invalid email format", SignupErrorType.EMAIL);
+            view.showError(R.string.invalid_email_format, SignupErrorType.EMAIL);
             return false;
         }
         return true;
@@ -67,7 +72,7 @@ public class SignupPresenterImp implements SignupPresenter {
 
     private boolean isValidPassword(String password) {
         if (!Validator.isPasswordValid(password)) {
-            view.showError("Password must be >=6 chars", SignupErrorType.PASSWORD);
+            view.showError(R.string.password_must_be, SignupErrorType.PASSWORD);
             return false;
         }
         return true;
@@ -75,7 +80,7 @@ public class SignupPresenterImp implements SignupPresenter {
 
     private boolean isPasswordConfirmed(String password, String confirm) {
         if (!Validator.isPasswordConfirmed(password, confirm)) {
-            view.showError("Passwords do not match", SignupErrorType.CONFIRM_PASSWORD);
+            view.showError(R.string.passwords_do_not_match, SignupErrorType.CONFIRM_PASSWORD);
             return false;
         }
         return true;
@@ -85,14 +90,14 @@ public class SignupPresenterImp implements SignupPresenter {
         if (throwable instanceof Exception) {
             Exception exception = (Exception) throwable;
             if (exception instanceof FirebaseAuthUserCollisionException) {
-                view.showError("Email already exists", SignupErrorType.EMAIL);
+                view.showError(R.string.email_already_exists, SignupErrorType.EMAIL);
             } else if (exception instanceof FirebaseAuthWeakPasswordException) {
-                view.showError("Weak password", SignupErrorType.PASSWORD);
+                view.showError(R.string.weak_password, SignupErrorType.PASSWORD);
             } else {
-                view.showError("Something went wrong, try again", SignupErrorType.GENERAL);
+                view.showError(R.string.something_went_wrong, SignupErrorType.GENERAL);
             }
         } else {
-            view.showError("Unexpected system error", SignupErrorType.GENERAL);
+            view.showError(R.string.unexpected_system_error, SignupErrorType.GENERAL);
         }
     }
 }

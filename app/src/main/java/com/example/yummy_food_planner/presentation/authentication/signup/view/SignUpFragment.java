@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -63,22 +64,22 @@ public class SignUpFragment extends Fragment implements SignupView {
     }
 
     @Override
-    public void showError(String message, SignupErrorType type) {
+    public void showError(int messageId, SignupErrorType type) {
         switch (type) {
             case EMAIL:
-                emailEdt.setError(message);
+                emailEdt.setError(getString(messageId));
                 break;
 
             case PASSWORD:
-                passwordEdt.setError(message);
+                passwordEdt.setError(getString(messageId));
                 break;
 
             case CONFIRM_PASSWORD:
-                confirmPasswordEdt.setError(message);
+                confirmPasswordEdt.setError(getString(messageId));
                 break;
 
             case GENERAL:
-                CustomSnackBar.showSnackBar(requireView(), message, getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+                CustomSnackBar.showSnackBar(requireView(), getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
                 break;
         }
     }

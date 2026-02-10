@@ -21,6 +21,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -33,7 +34,7 @@ public class SignInPresenterImp implements SignInPresenter {
     private CompositeDisposable compositeDisposable;
 
     public SignInPresenterImp(SignInView view, Context context) {
-        repository = new AuthRepositoryImp();
+        repository = new AuthRepositoryImp(context);
         this.view = view;
         this.context = context;
         this.compositeDisposable = new CompositeDisposable();
@@ -68,18 +69,22 @@ public class SignInPresenterImp implements SignInPresenter {
             GoogleSignInAccount account = task.getResult(ApiException.class);
 
             if (account == null || account.getIdToken() == null) {
-                view.showError(context.getString(R.string.failed_to_get_google_account), SignInErrorType.GOOGLE_ACCOUNT);
+                view.showError(R.string.failed_to_get_google_account, SignInErrorType.GOOGLE_ACCOUNT);
                 return;
             }
 
             compositeDisposable.add(
-                    repository.signInWithGoogle(account).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                    repository.signInWithGoogle(account)
+                            .subscribeOn(Schedulers.io())
+                            .flatMapCompletable(user ->
+                                    repository.saveUserData(user)
+                                            .andThen(repository.setLoggedIn())
+                                            .andThen(Completable.fromAction(() -> view.onSignInSuccess()))
+                            ).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
-                                    user -> {
-                                        view.onSignInSuccess();
-                                        //TODO save the user
+                                    () -> {
                                     },
-                                    throwable -> handleGoogleError(throwable)
+                                    this::handleGoogleError
                             )
             );
 
@@ -101,6 +106,7 @@ public class SignInPresenterImp implements SignInPresenter {
 
         compositeDisposable.add(
                 repository.signInWithEmailAndPassword(email, password)
+                        .andThen(repository.setLoggedIn())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(
                                 () -> view.onSignInSuccess(),
@@ -111,7 +117,7 @@ public class SignInPresenterImp implements SignInPresenter {
 
     private boolean isValidEmail(String email) {
         if (!Validator.isEmailValid(email)) {
-            view.showError("Invalid email format", SignInErrorType.EMAIL);
+            view.showError(R.string.invalid_email_format, SignInErrorType.EMAIL);
             return false;
         }
         return true;
@@ -119,7 +125,7 @@ public class SignInPresenterImp implements SignInPresenter {
 
     private boolean isValidPassword(String password) {
         if (!Validator.isPasswordValid(password)) {
-            view.showError("Password must be >=6 chars", SignInErrorType.PASSWORD);
+            view.showError(R.string.password_min_length, SignInErrorType.PASSWORD);
             return false;
         }
         return true;
@@ -130,14 +136,14 @@ public class SignInPresenterImp implements SignInPresenter {
             Exception e = (Exception) throwable;
             String message = e.getMessage() != null ? e.getMessage().toLowerCase() : "";
             if (message.contains("no user record")) {
-                view.showError("Email not registered", SignInErrorType.EMAIL);
+                view.showError(R.string.email_not_registered, SignInErrorType.EMAIL);
             } else if (message.contains("wrong password")) {
-                view.showError("Incorrect password", SignInErrorType.PASSWORD);
+                view.showError(R.string.incorrect_password, SignInErrorType.PASSWORD);
             } else {
-                view.showError(e.getMessage() != null ? e.getMessage() : "An error occurred", SignInErrorType.GENERAL);
+                view.showError(R.string.general_error, SignInErrorType.GENERAL);
             }
         } else {
-            view.showError("Unexpected system error", SignInErrorType.GENERAL);
+            view.showError(R.string.unexpected_system_error, SignInErrorType.GENERAL);
         }
     }
 
@@ -145,31 +151,29 @@ public class SignInPresenterImp implements SignInPresenter {
         if (throwable instanceof Exception) {
             Exception exception = (Exception) throwable;
             if (exception.getMessage() == null) {
-                view.showError("Google sign in failed", SignInErrorType.GOOGLE_ACCOUNT);
-                return;
+                view.showError(R.string.google_sign_in_failed, SignInErrorType.GOOGLE_ACCOUNT);
+            } else {
+                view.showError(R.string.google_sign_in_failed, SignInErrorType.GOOGLE_ACCOUNT);
             }
-            view.showError(exception.getMessage(), SignInErrorType.GOOGLE_ACCOUNT);
         } else {
-            view.showError("Unexpected system error", SignInErrorType.GENERAL);
+            view.showError(R.string.unexpected_system_error, SignInErrorType.GENERAL);
         }
     }
 
     private void handleGoogleApiError(ApiException e) {
-        String errorMessage;
-
+        int errorMessageRes;
         switch (e.getStatusCode()) {
             case 12500:
-                errorMessage = "Sign in was cancelled";
+                errorMessageRes = R.string.google_sign_in_cancelled;
                 break;
             case 7:
-                errorMessage = "Network connection error";
+                errorMessageRes = R.string.network_connection_error;
                 break;
             default:
-                errorMessage = "Google sign in failed";
+                errorMessageRes = R.string.google_sign_in_failed;
                 break;
         }
-
-        view.showError(errorMessage, SignInErrorType.GOOGLE_ACCOUNT);
+        view.showError(errorMessageRes, SignInErrorType.GOOGLE_ACCOUNT);
     }
 
     @Override

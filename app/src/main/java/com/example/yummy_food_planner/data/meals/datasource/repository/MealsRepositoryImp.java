@@ -94,8 +94,12 @@ public class MealsRepositoryImp implements MealRepository {
     }
 
     @Override
-    public Completable addMealToFavorite(Meal meal, String userId) {
-        return localMealDataSource.addMealToFavorite(meal, userId);
+    public Completable addMealToFavorite(Meal meal) {
+        return localMealDataSource.addMealToFavorite(meal);
+    }
+    @Override
+    public Single<Boolean> isMealFavorite(String mealId, String userId) {
+        return localMealDataSource.isMealFavorite(mealId,userId);
     }
 
     @Override
@@ -104,8 +108,8 @@ public class MealsRepositoryImp implements MealRepository {
     }
 
     @Override
-    public Completable addMealToPlan(Plan meal, Long date, String userId) {
-        return localMealDataSource.addMealToPlan(meal, date, userId);
+    public Completable addMealToPlan(Plan meal) {
+        return localMealDataSource.addMealToPlan(meal);
     }
 
     @Override

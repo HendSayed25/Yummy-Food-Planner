@@ -63,4 +63,18 @@
     <string name="failure_loading_meal_details">Error occurred please try again</string>
     <string name="your_week_plan">Your Week Plan :</string>
     <string name="no_plans_yet">No Plans Yet</string>
+    <string name="invalid_email_format">Invalid email format</string>
+    <string name="password_must_be">Password must be >=6 chars</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="email_already_exists">Email already exists</string>
+    <string name="weak_password">Weak password</string>
+    <string name="something_went_wrong">Something went wrong, try again</string>
+    <string name="unexpected_system_error">Unexpected system error</string>
+    <string name="password_min_length">Password must be >=6 chars</string>
+    <string name="email_not_registered">Email not registered</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="general_error">An error occurred</string>
+    <string name="google_sign_in_failed">Google sign in failed</string>
+    <string name="google_sign_in_cancelled">Sign in was cancelled</string>
+    <string name="network_connection_error">Network connection error</string>
 </resources>

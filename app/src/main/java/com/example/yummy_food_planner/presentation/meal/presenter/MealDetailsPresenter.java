@@ -7,6 +7,6 @@ public interface MealDetailsPresenter {
     void addToFavorite(MealUiModel meal);
     void removeFromFavorite(MealUiModel meal);
     void addToCalender(MealUiModel meal);
-    void checkIfFavorite(String mealId, String userId);
+    void checkIfFavorite(String mealId);
     void onDestroy();
 }

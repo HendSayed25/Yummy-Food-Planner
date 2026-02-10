@@ -3,6 +3,8 @@ package com.example.yummy_food_planner.presentation.meal.presenter;
 import android.content.Context;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepository;
+import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
@@ -28,6 +30,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MealDetailsPresenterImp implements MealDetailsPresenter {
 
     private MealRepository repository;
+    private AuthRepository authRepository;
     private CompositeDisposable compositeDisposable;
     private Context context;
     private MealDetailsView view;
@@ -37,6 +40,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
         this.view = view;
         compositeDisposable = new CompositeDisposable();
         repository = new MealsRepositoryImp(context);
+        authRepository = new AuthRepositoryImp(context);
     }
 
     @Override
@@ -72,7 +76,11 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     @Override
     public void addToFavorite(MealUiModel meal) {
         compositeDisposable.add(
-                repository.addMealToFavorite(new Meal(meal.getId(), "", meal.getName(), meal.getImageUrl())).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                authRepository.getUserId()
+                        .subscribeOn(Schedulers.io())
+                        .flatMapCompletable(userId ->
+                                repository.addMealToFavorite(new Meal(meal.getId(), userId, meal.getName(), meal.getImageUrl())))
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 () -> view.addedToFav(),
                                 error -> view.showError(R.string.failure_loading)
@@ -80,14 +88,18 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
         );
     }
 
-    @Override
     public void removeFromFavorite(MealUiModel meal) {
         compositeDisposable.add(
-                repository.deleteMealFromFavorite(meal.getId(), "").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) /// ////////////////user id
+                authRepository.getUserId()
+                        .subscribeOn(Schedulers.io())
+                        .flatMapCompletable(userId ->
+                                repository.deleteMealFromFavorite(meal.getId(), userId)
+                        )
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 () -> view.removeFromFav(),
                                 error -> view.showError(R.string.failure_loading)
-                        ) ///TODO get userID
+                        )
         );
     }
 
@@ -95,11 +107,13 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     public void addToCalender(MealUiModel meal) {
         /// TODO save to calender
     }
-
     @Override
-    public void checkIfFavorite(String mealId, String userId) {
+    public void checkIfFavorite(String mealId) {
         compositeDisposable.add(
-                repository.isMealFavorite(mealId, userId)
+                authRepository.getUserId()
+                        .subscribeOn(Schedulers.io())
+                        .flatMap(userId -> repository.isMealFavorite(mealId, userId))
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 isFav -> {
                                     if (isFav) {
@@ -110,7 +124,6 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                                 },
                                 throwable -> view.showError(R.string.failure_loading)
                         )
-
         );
     }
 

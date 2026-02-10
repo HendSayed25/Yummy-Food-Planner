@@ -78,7 +78,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         if (getArguments() != null) {
             String mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
             presenter.getMealDetailsById(mealId);
-            presenter.checkIfFavorite(mealId, "");
+            presenter.checkIfFavorite(mealId);
         }
 
         playerView.setOnClickListener(v -> {
@@ -183,7 +183,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
 
     @Override
     public void removeFromFav() {
-        addToFav.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_white_heart)); ////////////// white heart
+        addToFav.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_white_heart));
     }
 
     private void updateHeartIcon(boolean isFav) {

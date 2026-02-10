@@ -18,20 +18,26 @@ import java.util.List;
 public class FavMealAdapter extends RecyclerView.Adapter<FavMealAdapter.FavMealViewHolder> {
 
     private List<MealUiModel> favMealUiModels;
+    public onItemClickListener listener;
 
-    public FavMealAdapter(List<MealUiModel> favMealUiModels) {
-        this.favMealUiModels = favMealUiModels;
+    public FavMealAdapter() {
+        listener = null;
+    }
+
+    public void setData(List<MealUiModel> meals) {
+        this.favMealUiModels = meals;
+        notifyDataSetChanged();
     }
 
     public static class FavMealViewHolder extends RecyclerView.ViewHolder {
-        ImageView mealImage;
+        ImageView mealImage, favIcon;
         TextView mealName;
 
         public FavMealViewHolder(View view) {
             super(view);
             mealImage = view.findViewById(R.id.ivMealImageFav);
             mealName = view.findViewById(R.id.tvMealNameFav);
-
+            favIcon = view.findViewById(R.id.favBtn);
         }
     }
 
@@ -48,10 +54,26 @@ public class FavMealAdapter extends RecyclerView.Adapter<FavMealAdapter.FavMealV
 
         holder.mealName.setText(favMealUiModel.getName());
         GlideImageLoader.load(holder.itemView.getContext(), favMealUiModel.getImageUrl(), holder.mealImage);
+
+        if (listener != null) {
+            holder.itemView.setOnClickListener(v -> {
+                listener.onItemClick(favMealUiModel.getId(), v);
+            });
+
+            holder.favIcon.setOnClickListener(v -> {
+                listener.onFavIconClick(favMealUiModel.getId(), v);
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return favMealUiModels.size();
+    }
+
+    public interface onItemClickListener {
+        void onItemClick(String id, View v);
+
+        void onFavIconClick(String id, View v);
     }
 }

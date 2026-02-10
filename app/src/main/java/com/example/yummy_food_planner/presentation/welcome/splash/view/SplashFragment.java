@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.presentation.welcome.splash;
+package com.example.yummy_food_planner.presentation.welcome.splash.view;
 
 import android.os.Bundle;
 
@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -18,11 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
+import com.example.yummy_food_planner.presentation.welcome.splash.presenter.SplashPresenter;
+import com.example.yummy_food_planner.presentation.welcome.splash.presenter.SplashPresenterImp;
 
-public class SplashFragment extends Fragment {
+public class SplashFragment extends Fragment implements SplashView {
 
     private ImageView logo;
     private TextView appName;
+    private SplashPresenter presenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +40,7 @@ public class SplashFragment extends Fragment {
 
         logo = view.findViewById(R.id.logo_ic);
         appName = view.findViewById(R.id.appName);
+        presenter = new SplashPresenterImp(getContext(),this);
 
         startEnterAnimation();
 
@@ -42,6 +48,7 @@ public class SplashFragment extends Fragment {
             @Override
             public void run() {
                 startEndAnimation(view);
+                presenter.checkLoginState();
             }
         }, 2500);
     }
@@ -76,5 +83,34 @@ public class SplashFragment extends Fragment {
 
         logo.startAnimation(fadeOut);
         appName.startAnimation(fadeOut);
+    }
+
+    @Override
+    public void goToOnboardingScreens() {
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_splashFragment_to_onboardingFragment1);
+    }
+
+    @Override
+    public void goToSignInScreen() {
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_splashFragment_to_signInFragment);
+    }
+
+    @Override
+    public void goToHomeScreen() {
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_splashFragment_to_homeFragment);
+    }
+
+    @Override
+    public void showError(int messageId) {
+        CustomSnackBar.showSnackBar(requireView(),getString(messageId),getResources().getColor(R.color.logo_bg),getResources().getColor(R.color.blue_primary));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.onDestroy();
     }
 }

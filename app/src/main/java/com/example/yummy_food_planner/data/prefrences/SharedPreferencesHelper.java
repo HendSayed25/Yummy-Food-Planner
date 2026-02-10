@@ -52,7 +52,7 @@ public class SharedPreferencesHelper {
     }
 
     public void setIsNotFirstTime() {
-        editor.putBoolean(IS_FIRST_TIME, false);
+        editor.putBoolean(IS_FIRST_TIME, false).apply();
     }
 
     public Boolean isFirstTime() {

@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.presentation.welcome.onboarding;
+package com.example.yummy_food_planner.presentation.welcome.onboarding.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

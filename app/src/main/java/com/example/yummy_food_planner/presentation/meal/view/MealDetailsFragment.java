@@ -43,6 +43,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     private MealDetailsPresenter presenter;
     private CardView mealCard;
     private YouTubePlayerView playerView;
+    private YouTubePlayer myYouTubePlayer = null;
     private MealDetailsUiModel currentMeal;
     private boolean isFavorite = false;
 
@@ -79,6 +80,12 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
             presenter.getMealDetailsById(mealId);
             presenter.checkIfFavorite(mealId, "");
         }
+
+        playerView.setOnClickListener(v -> {
+            if (myYouTubePlayer != null) {
+                myYouTubePlayer.play();
+            }
+        });
     }
 
     @Override
@@ -121,7 +128,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         playerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                youTubePlayer.loadVideo(videoId, 0);
+                myYouTubePlayer = youTubePlayer;
+                myYouTubePlayer.cueVideo(videoId, 0);
             }
         });
     }
@@ -190,5 +198,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     public void onDestroy() {
         super.onDestroy();
         presenter.onDestroy();
+
+        if (playerView != null) {
+            playerView.release();
+        }
     }
 }

@@ -5,6 +5,8 @@ import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 public interface MealDetailsPresenter {
     void getMealDetailsById(String id);
     void addToFavorite(MealUiModel meal);
+    void removeFromFavorite(MealUiModel meal);
     void addToCalender(MealUiModel meal);
+    void checkIfFavorite(String mealId, String userId);
     void onDestroy();
 }

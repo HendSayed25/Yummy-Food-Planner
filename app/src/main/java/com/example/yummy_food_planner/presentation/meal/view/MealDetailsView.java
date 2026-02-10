@@ -25,4 +25,8 @@ public interface MealDetailsView {
     void showLoading();
 
     void hideLoading();
+
+    void addedToFav();
+
+    void removeFromFav();
 }

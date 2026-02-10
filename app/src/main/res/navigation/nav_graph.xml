@@ -107,5 +107,14 @@
             android:name="mealId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/mealPlanFragment"
+        android:name="com.example.yummy_food_planner.presentation.calender.view.MealPlanFragment"
+        android:label="fragment_meal_plan"
+        tools:layout="@layout/fragment_meal_plan" >
+        <action
+            android:id="@+id/action_mealPlanFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
 
 </navigation>

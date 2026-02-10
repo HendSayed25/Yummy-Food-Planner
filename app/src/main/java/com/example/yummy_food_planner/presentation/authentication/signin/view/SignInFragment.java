@@ -89,21 +89,21 @@ public class SignInFragment extends Fragment implements SignInView {
     }
 
     @Override
-    public void showError(String message, SignInErrorType type) {
+    public void showError(int messageId, SignInErrorType type) {
         switch (type) {
             case EMAIL:
-                etEmail.setError(message);
+                etEmail.setError(getString(messageId));
                 etPassword.setError(null);
                 break;
 
             case PASSWORD:
-               etPassword.setError(message);
+               etPassword.setError(getString(messageId));
                 etEmail.setError(null);
                 break;
 
             case GOOGLE_ACCOUNT:
             case GENERAL:
-                CustomSnackBar.showSnackBar(requireView(),message,getResources().getColor(R.color.logo_bg),getResources().getColor(R.color.blue_primary));
+                CustomSnackBar.showSnackBar(requireView(),getString(messageId),getResources().getColor(R.color.logo_bg),getResources().getColor(R.color.blue_primary));
                 break;
         }
     }

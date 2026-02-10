@@ -64,8 +64,8 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
             }
 
             @Override
-            public void onFavIconClick(String id, View v) {
-                presenter.removeFromFavorite(id, "");////////////////////////////
+            public void onFavIconClick(String id) {
+                presenter.removeFromFavorite(id);
             }
         };
     }

@@ -61,7 +61,7 @@ public class FavMealAdapter extends RecyclerView.Adapter<FavMealAdapter.FavMealV
             });
 
             holder.favIcon.setOnClickListener(v -> {
-                listener.onFavIconClick(favMealUiModel.getId(), v);
+                listener.onFavIconClick(favMealUiModel.getId());
             });
         }
     }
@@ -74,6 +74,6 @@ public class FavMealAdapter extends RecyclerView.Adapter<FavMealAdapter.FavMealV
     public interface onItemClickListener {
         void onItemClick(String id, View v);
 
-        void onFavIconClick(String id, View v);
+        void onFavIconClick(String id);
     }
 }

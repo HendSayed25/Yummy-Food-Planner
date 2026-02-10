@@ -19,8 +19,8 @@ import io.reactivex.rxjava3.core.Single;
 @Dao
 public interface MealDao {
 
-    @Query("SELECT * FROM " + MEAL_TABLE_NAME)
-    Observable<List<Meal>> getAllFavorite();
+    @Query("SELECT * FROM " + MEAL_TABLE_NAME + " WHERE userId= :userId")
+    Observable<List<Meal>> getAllFavorite(String userId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable addToFavorite(Meal meal);
@@ -28,6 +28,6 @@ public interface MealDao {
     @Query("DELETE FROM " + MEAL_TABLE_NAME + " WHERE id =:mealId AND userID= :userId")
     Completable deleteFromFavorite(String mealId, String userId);
 
-    @Query("SELECT COUNT(*) FROM meals WHERE id = :mealId AND userId = :userId")
+    @Query("SELECT COUNT(*) FROM " + MEAL_TABLE_NAME + " WHERE id = :mealId AND userId = :userId")
     Single<Integer> isMealFavorite(String mealId, String userId);
 }

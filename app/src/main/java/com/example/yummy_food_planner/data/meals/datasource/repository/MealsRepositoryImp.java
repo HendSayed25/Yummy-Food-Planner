@@ -84,12 +84,12 @@ public class MealsRepositoryImp implements MealRepository {
     }
 
     @Override
-    public Observable<List<Meal>> getAllFavoriteMeals() {
-        return localMealDataSource.getAllFavoriteMeals();
+    public Observable<List<Meal>> getAllFavoriteMeals(String userId) {
+        return localMealDataSource.getAllFavoriteMeals(userId);
     }
 
     @Override
-    public Observable<List<Plan>> getMealPlansByDate(Long date, String userId) {
+    public Observable<List<Plan>> getPlanedMealsByDate(Long date, String userId) {
         return localMealDataSource.getMealPlansByData(date, userId);
     }
 
@@ -97,9 +97,10 @@ public class MealsRepositoryImp implements MealRepository {
     public Completable addMealToFavorite(Meal meal) {
         return localMealDataSource.addMealToFavorite(meal);
     }
+
     @Override
     public Single<Boolean> isMealFavorite(String mealId, String userId) {
-        return localMealDataSource.isMealFavorite(mealId,userId);
+        return localMealDataSource.isMealFavorite(mealId, userId);
     }
 
     @Override
@@ -115,5 +116,10 @@ public class MealsRepositoryImp implements MealRepository {
     @Override
     public Completable deleteMealFromPlan(String mealId, Long date, String userId) {
         return localMealDataSource.deleteMealFromPlan(mealId, date, userId);
+    }
+
+    @Override
+    public Single<Boolean> isMealPlaned(String mealId, String userId) {
+        return localMealDataSource.isMealPlaned(mealId, userId);
     }
 }

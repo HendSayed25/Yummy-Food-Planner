@@ -21,8 +21,8 @@ public class LocalMealDataSource {
         planDao = AppDatabase.getInstance(context).planDao();
     }
 
-    public Observable<List<Meal>> getAllFavoriteMeals() {
-        return mealDao.getAllFavorite();
+    public Observable<List<Meal>> getAllFavoriteMeals(String userId) {
+        return mealDao.getAllFavorite(userId);
     }
 
     public Completable addMealToFavorite(Meal meal) {
@@ -48,5 +48,10 @@ public class LocalMealDataSource {
 
     public Completable deleteMealFromPlan(String mealId, Long date, String userId) {
         return planDao.deleteMeal(mealId, date, userId);
+    }
+
+    public Single<Boolean> isMealPlaned(String mealId, String userId) {
+        return planDao.isMealPlaned(mealId, userId)
+                .map(count -> count > 0);
     }
 }

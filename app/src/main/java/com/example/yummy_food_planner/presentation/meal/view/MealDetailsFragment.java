@@ -3,6 +3,9 @@ package com.example.yummy_food_planner.presentation.meal.view;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import static com.example.yummy_food_planner.presentation.shared.utils.CalenderUtils.getSelectedDateInMillis;
+
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MealDetailsFragment extends Fragment implements MealDetailsView {
@@ -71,6 +75,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         ingredientTitle = view.findViewById(R.id.tvIngredients);
         instructionTitle = view.findViewById(R.id.tvInstructionsTitle);
         youtubeSectionTitle = view.findViewById(R.id.tvYoutubeTitle);
+//        isPlanned = presenter.
 
         adapter = new MealIngredientsAdapter();
         presenter = new MealDetailsPresenterImp(getContext(), this);
@@ -79,6 +84,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
             String mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
             presenter.getMealDetailsById(mealId);
             presenter.checkIfFavorite(mealId);
+            presenter.checkIfPlanned(mealId);
         }
 
         playerView.setOnClickListener(v -> {
@@ -86,6 +92,40 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
                 myYouTubePlayer.play();
             }
         });
+
+        addToFav.setOnClickListener(v -> {
+            isFavorite = !isFavorite;
+            updateHeartIcon(isFavorite);
+
+            if (isFavorite) {
+                presenter.addToFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
+            } else {
+                presenter.deleteFromFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
+            }
+        });
+
+        addToCalender.setOnClickListener(v -> showDatePicker());
+    }
+
+    private void showDatePicker() {
+
+        Calendar calendar = Calendar.getInstance();
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                requireContext(),
+                R.style.MyDatePickerTheme,
+                (view, year, month, day) -> {
+
+                    long date = getSelectedDateInMillis(year, month, day);
+                    presenter.addToPlan(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()), date);
+
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+
+        dialog.show();
     }
 
     @Override
@@ -101,21 +141,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         mealCountry.setText(meal.getCountry());
         mealCategory.append(meal.getCategory() + ", ");
         GlideImageLoader.load(requireContext(), meal.getMealImageUrl(), mealImage);
-
-        addToFav.setOnClickListener(v -> {
-            isFavorite = !isFavorite;
-            updateHeartIcon(isFavorite);
-
-            if (isFavorite) {
-                presenter.addToFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
-            } else {
-                presenter.removeFromFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
-            }
-        });
-
-        addToCalender.setOnClickListener(v -> {
-            presenter.addToCalender(new MealUiModel(meal.getName(), meal.getMealImageUrl(), meal.getId()));
-        });
     }
 
     @Override
@@ -182,8 +207,18 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     }
 
     @Override
-    public void removeFromFav() {
+    public void deleteFromFav() {
         addToFav.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_white_heart));
+    }
+
+    @Override
+    public void showAddedToMealPlanIcon() {
+        addToCalender.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_added_to_plan));
+    }
+
+    @Override
+    public void showAddToPlanIcon() {
+        addToCalender.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_add_to_plan));
     }
 
     private void updateHeartIcon(boolean isFav) {

@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.presentation.favorite.presenter;
+package com.example.yummy_food_planner.presentation.mealplan.presenter;
 
 import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.mapToUiList;
 
@@ -9,21 +9,21 @@ import com.example.yummy_food_planner.data.authentication.datasource.repository.
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
-import com.example.yummy_food_planner.presentation.favorite.view.FavoriteView;
-import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
+import com.example.yummy_food_planner.presentation.mealplan.model.MealPlanUiModel;
+import com.example.yummy_food_planner.presentation.mealplan.view.MealPlanView;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class FavoritePresenterImp implements FavoritePresenter {
+public class MealPlanPresenterImp implements MealPlanPresenter {
 
     private MealRepository mealRepository;
     private AuthRepository authRepository;
-    private FavoriteView view;
     private CompositeDisposable compositeDisposable;
+    private MealPlanView view;
 
-    public FavoritePresenterImp(Context context, FavoriteView view) {
+    public MealPlanPresenterImp(Context context, MealPlanView view) {
         this.view = view;
         mealRepository = new MealsRepositoryImp(context);
         authRepository = new AuthRepositoryImp(context);
@@ -31,31 +31,31 @@ public class FavoritePresenterImp implements FavoritePresenter {
     }
 
     @Override
-    public void showAllFavorites() {
+    public void getPlannedMealsByData(Long date) {
         compositeDisposable.add(
                 authRepository.getUserId().subscribeOn(Schedulers.io())
-                        .flatMapObservable(userId -> mealRepository.getAllFavoriteMeals(userId))
+                        .flatMapObservable(userId -> mealRepository.getPlanedMealsByDate(date, userId))
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                meals -> view.showFavMeals(mapToUiList(meals, m -> new MealUiModel(m.getName(), m.getMealThumb(), m.getId()))),
+                                meals -> view.showMeals(mapToUiList(meals, m -> new MealPlanUiModel(m.getName(), m.getMealThumb(), m.getMealId(),m.getDate()))),
                                 error -> view.showMessage(R.string.failure_loading)
                         )
         );
+
     }
 
     @Override
-    public void deleteFromFavorite(String mealId) {
+    public void deleteMealFromPlan(String mealId, Long date) {
         compositeDisposable.add(
-                authRepository.getUserId()
-                        .subscribeOn(Schedulers.io())
-                        .flatMapCompletable(userId ->
-                                mealRepository.deleteMealFromFavorite(mealId, userId))
-                        .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                                () -> {
-                                },
+                authRepository.getUserId().subscribeOn(Schedulers.io())
+                        .flatMapCompletable(userId -> mealRepository.deleteMealFromPlan(mealId, date, userId))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> {},
                                 error -> view.showMessage(R.string.failure_loading)
                         )
         );
+
     }
 
     @Override

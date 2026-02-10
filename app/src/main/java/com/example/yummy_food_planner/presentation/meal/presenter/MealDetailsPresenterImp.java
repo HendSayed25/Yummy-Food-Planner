@@ -10,6 +10,7 @@ import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepos
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.data.model.MealDto;
 import com.example.yummy_food_planner.data.model.entitiy.Meal;
+import com.example.yummy_food_planner.data.model.entitiy.Plan;
 import com.example.yummy_food_planner.presentation.meal.model.IngredientUiModel;
 import com.example.yummy_food_planner.presentation.meal.model.MealDetailsUiModel;
 import com.example.yummy_food_planner.presentation.meal.view.MealDetailsView;
@@ -88,7 +89,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
         );
     }
 
-    public void removeFromFavorite(MealUiModel meal) {
+    public void deleteFromFavorite(MealUiModel meal) {
         compositeDisposable.add(
                 authRepository.getUserId()
                         .subscribeOn(Schedulers.io())
@@ -97,16 +98,27 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                         )
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.removeFromFav(),
+                                () -> view.deleteFromFav(),
                                 error -> view.showError(R.string.failure_loading)
                         )
         );
     }
 
     @Override
-    public void addToCalender(MealUiModel meal) {
-        /// TODO save to calender
+    public void addToPlan(MealUiModel meal, Long date) {
+        compositeDisposable.add(
+                authRepository.getUserId()
+                        .subscribeOn(Schedulers.io())
+                        .flatMapCompletable(userId ->
+                                repository.addMealToPlan(new Plan(userId, meal.getId(), date, meal.getName(), meal.getImageUrl())))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> view.showAddedToMealPlanIcon(),
+                                error -> view.showError(R.string.failure_loading)
+                        )
+        );
     }
+
     @Override
     public void checkIfFavorite(String mealId) {
         compositeDisposable.add(
@@ -119,12 +131,33 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                                     if (isFav) {
                                         view.addedToFav();
                                     } else {
-                                        view.removeFromFav();
+                                        view.deleteFromFav();
                                     }
                                 },
                                 throwable -> view.showError(R.string.failure_loading)
                         )
         );
+    }
+
+    @Override
+    public void checkIfPlanned(String mealId) {
+        compositeDisposable.add(
+                authRepository.getUserId()
+                        .subscribeOn(Schedulers.io())
+                        .flatMap(userId -> repository.isMealPlaned(mealId, userId))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                isPlan -> {
+                                    if (isPlan) {
+                                        view.showAddedToMealPlanIcon();
+                                    } else {
+                                        view.showAddToPlanIcon();
+                                    }
+                                },
+                                throwable -> view.showError(R.string.failure_loading)
+                        )
+        );
+
     }
 
     private void extractDetails(MealResponse meal) {

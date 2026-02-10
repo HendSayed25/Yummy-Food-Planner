@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".presentation.calender.view.MealPlanFragment">
+    tools:context=".presentation.mealplan.view.MealPlanFragment">
 
     <TextView
         android:id="@+id/calenderTitle"
@@ -41,20 +41,32 @@
         app:layout_constraintTop_toBottomOf="@id/calendarView"
         tools:listitem="@layout/plan_item" />
 
-    <TextView
-        android:id="@+id/emptyText"
+    <LinearLayout
+        android:id="@+id/empty_listPlan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:fontFamily="@font/poppins_semibold"
         android:gravity="center"
-        android:text="@string/no_plans_yet"
-        android:textColor="@color/blue_primary"
-        android:textSize="18sp"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/calendarView" />
+        app:layout_constraintTop_toBottomOf="@id/calendarView">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/no_favorites_icon"
+            android:src="@drawable/ic_no_plans_yet" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:text="@string/no_plans_yet"
+            android:textColor="@color/blue_primary"
+            android:textSize="17sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

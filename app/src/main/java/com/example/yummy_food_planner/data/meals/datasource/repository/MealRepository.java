@@ -37,11 +37,12 @@ public interface MealRepository {
 
     String getIngredientImageUrl(String ingredientName);
 
-    Observable<List<Meal>> getAllFavoriteMeals();
+    Observable<List<Meal>> getAllFavoriteMeals(String userId);
 
-    Observable<List<Plan>> getMealPlansByDate(Long date, String userId);
+    Observable<List<Plan>> getPlanedMealsByDate(Long date, String userId);
 
     Completable addMealToFavorite(Meal meal);
+
     Single<Boolean> isMealFavorite(String mealId, String userId);
 
     Completable deleteMealFromFavorite(String mealId, String userId);
@@ -49,4 +50,6 @@ public interface MealRepository {
     Completable addMealToPlan(Plan meal);
 
     Completable deleteMealFromPlan(String mealId, Long date, String userId);
+
+    Single<Boolean> isMealPlaned(String mealId, String userId);
 }

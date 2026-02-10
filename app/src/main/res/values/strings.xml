@@ -58,4 +58,6 @@
     <string name="youtube">Youtube :</string>
     <string name="failure_loading">Error occurred please try again</string>
     <string name="no_internet_fav">No internet connection try to connect to see the meal details</string>
+    <string name="no_favorites_yet_n_discover_our_meals_to_add_them_to_favorite">No Favorites Yet..\n Discover Our Meals To Add Them To Favorite.</string>
+    <string name="no_favorites_icon">no favorites icon</string>
 </resources>

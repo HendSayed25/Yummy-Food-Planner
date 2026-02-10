@@ -1,5 +1,8 @@
 package com.example.yummy_food_planner.presentation.favorite.view;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.favorite.presenter.FavoritePresenter;
@@ -28,6 +33,8 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
     private RecyclerView favRecycler;
     private FavMealAdapter favMealAdapter;
     private FavoritePresenter presenter;
+    private TextView screenTitle;
+    private LinearLayout noFavoritesLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,6 +46,8 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
         super.onViewCreated(view, savedInstanceState);
 
         favRecycler = view.findViewById(R.id.favoriteRecycler);
+        screenTitle = view.findViewById(R.id.favoriteTitle);
+        noFavoritesLayout = view.findViewById(R.id.empty_list);
         favMealAdapter = new FavMealAdapter();
         presenter = new FavoritePresenterImp(getContext(), this);
 
@@ -70,6 +79,14 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
     public void showFavMeals(List<MealUiModel> meals) {
         favMealAdapter.setData(meals);
         favRecycler.setAdapter(favMealAdapter);
+
+        if(meals.isEmpty()){
+            screenTitle.setVisibility(GONE);
+            noFavoritesLayout.setVisibility(VISIBLE);
+        }else{
+            screenTitle.setVisibility(VISIBLE);
+            noFavoritesLayout.setVisibility(GONE);
+        }
     }
 
     @Override

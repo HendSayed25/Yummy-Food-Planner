@@ -11,7 +11,7 @@ import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepos
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.FilterMealResponse;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
-import com.example.yummy_food_planner.data.model.MealDto;
+import com.example.yummy_food_planner.data.model.dto.MealDto;
 import com.example.yummy_food_planner.presentation.search.utils.Filter;
 import com.example.yummy_food_planner.presentation.search.utils.RecyclerListType;
 import com.example.yummy_food_planner.presentation.search.view.SearchViews;

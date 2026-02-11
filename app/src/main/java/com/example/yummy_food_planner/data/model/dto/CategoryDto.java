@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.data.model;
+package com.example.yummy_food_planner.data.model.dto;
 
 import com.google.gson.annotations.SerializedName;
 

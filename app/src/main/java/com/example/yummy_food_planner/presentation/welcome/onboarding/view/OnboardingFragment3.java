@@ -51,10 +51,7 @@ public class OnboardingFragment3 extends BaseOnboardingFragment implements Onboa
         setupDots(dotContainer);
         applySpecialAnimations();
 
-        startBtn.setOnClickListener(v -> {
-            presenter.setNotFirstTime();
-            Log.e("TAG", "Clikced");
-        });
+        startBtn.setOnClickListener(v -> presenter.setNotFirstTime());
 
         backBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();

@@ -42,13 +42,13 @@
 
         <ImageView
             android:id="@+id/icAddToCalender"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:clickable="true"
             android:contentDescription="@string/add_to_favorite_icon"
             android:focusable="true"
-            android:src="@drawable/ic_calender"
+            android:src="@drawable/ic_add_to_plan"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

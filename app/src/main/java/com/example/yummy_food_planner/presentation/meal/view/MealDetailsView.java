@@ -28,5 +28,7 @@ public interface MealDetailsView {
 
     void addedToFav();
 
-    void removeFromFav();
+    void deleteFromFav();
+    void showAddedToMealPlanIcon();
+    void showAddToPlanIcon();
 }

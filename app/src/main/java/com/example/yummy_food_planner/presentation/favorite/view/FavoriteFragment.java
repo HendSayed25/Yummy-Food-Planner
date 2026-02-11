@@ -20,12 +20,10 @@ import android.widget.TextView;
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.favorite.presenter.FavoritePresenter;
 import com.example.yummy_food_planner.presentation.favorite.presenter.FavoritePresenterImp;
-import com.example.yummy_food_planner.presentation.home.view.HomeFragmentDirections;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteFragment extends Fragment implements FavoriteView {
@@ -65,7 +63,7 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
 
             @Override
             public void onFavIconClick(String id) {
-                presenter.removeFromFavorite(id);
+                presenter.deleteFromFavorite(id);
             }
         };
     }

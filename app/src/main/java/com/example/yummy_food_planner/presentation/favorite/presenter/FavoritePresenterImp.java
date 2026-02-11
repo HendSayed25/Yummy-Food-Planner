@@ -33,7 +33,9 @@ public class FavoritePresenterImp implements FavoritePresenter {
     @Override
     public void showAllFavorites() {
         compositeDisposable.add(
-                mealRepository.getAllFavoriteMeals().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                authRepository.getUserId().subscribeOn(Schedulers.io())
+                        .flatMapObservable(userId -> mealRepository.getAllFavoriteMeals(userId))
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 meals -> view.showFavMeals(mapToUiList(meals, m -> new MealUiModel(m.getName(), m.getMealThumb(), m.getId()))),
                                 error -> view.showMessage(R.string.failure_loading)
@@ -42,14 +44,15 @@ public class FavoritePresenterImp implements FavoritePresenter {
     }
 
     @Override
-    public void removeFromFavorite(String mealId) {
+    public void deleteFromFavorite(String mealId) {
         compositeDisposable.add(
                 authRepository.getUserId()
                         .subscribeOn(Schedulers.io())
                         .flatMapCompletable(userId ->
                                 mealRepository.deleteMealFromFavorite(mealId, userId))
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                                () -> {},
+                                () -> {
+                                },
                                 error -> view.showMessage(R.string.failure_loading)
                         )
         );

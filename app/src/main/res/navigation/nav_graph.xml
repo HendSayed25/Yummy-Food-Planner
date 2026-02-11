@@ -7,17 +7,23 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.yummy_food_planner.presentation.welcome.splash.SplashFragment"
+        android:name="com.example.yummy_food_planner.presentation.welcome.splash.view.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
             android:id="@+id/action_splashFragment_to_onboardingFragment1"
             app:destination="@id/onboardingFragment1" />
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/onboardingFragment1"
-        android:name="com.example.yummy_food_planner.presentation.welcome.onboarding.OnboardingFragment1"
+        android:name="com.example.yummy_food_planner.presentation.welcome.onboarding.view.OnboardingFragment1"
         android:label="fragment_onboarding1"
         tools:layout="@layout/fragment_onboarding1" >
         <action
@@ -30,7 +36,7 @@
 
     <fragment
         android:id="@+id/onboardingFragment2"
-        android:name="com.example.yummy_food_planner.presentation.welcome.onboarding.OnboardingFragment2"
+        android:name="com.example.yummy_food_planner.presentation.welcome.onboarding.view.OnboardingFragment2"
         android:label="fragment_onboarding2"
         tools:layout="@layout/fragment_onboarding2" >
         <action
@@ -40,7 +46,7 @@
 
     <fragment
         android:id="@+id/onboardingFragment3"
-        android:name="com.example.yummy_food_planner.presentation.welcome.onboarding.OnboardingFragment3"
+        android:name="com.example.yummy_food_planner.presentation.welcome.onboarding.view.OnboardingFragment3"
         android:label="fragment_onboarding3"
         tools:layout="@layout/fragment_onboarding3" >
         <action

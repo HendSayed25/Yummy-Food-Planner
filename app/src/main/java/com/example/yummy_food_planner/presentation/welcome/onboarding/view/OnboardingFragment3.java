@@ -1,7 +1,8 @@
-package com.example.yummy_food_planner.presentation.welcome.onboarding;
+package com.example.yummy_food_planner.presentation.welcome.onboarding.view;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.yummy_food_planner.R;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
+import com.example.yummy_food_planner.presentation.welcome.onboarding.presenter.OnboardingPresenter;
+import com.example.yummy_food_planner.presentation.welcome.onboarding.presenter.OnboardingPresenterImp;
 
 
-public class OnboardingFragment3 extends BaseOnboardingFragment {
+public class OnboardingFragment3 extends BaseOnboardingFragment implements OnboardingView {
 
     private AppCompatButton startBtn, backBtn;
     private LinearLayout dotContainer;
     private ImageView onboardingImage;
     private TextView description;
+    private OnboardingPresenter presenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,13 +46,14 @@ public class OnboardingFragment3 extends BaseOnboardingFragment {
         onboardingImage = view.findViewById(R.id.onboardingImage3);
         description = view.findViewById(R.id.descriptionTv3);
         backBtn = view.findViewById(R.id.backBtn3);
+        presenter = new OnboardingPresenterImp(getContext(), this);
 
         setupDots(dotContainer);
         applySpecialAnimations();
 
         startBtn.setOnClickListener(v -> {
-            //navigate to login screen or home
-            Navigation.findNavController(v).navigate(R.id.action_onboardingFragment3_to_signInFragment);
+            presenter.setNotFirstTime();
+            Log.e("TAG", "Clikced");
         });
 
         backBtn.setOnClickListener(v -> {
@@ -87,5 +94,15 @@ public class OnboardingFragment3 extends BaseOnboardingFragment {
             Animation pulse = AnimationUtils.loadAnimation(requireContext(), R.anim.pluse);
             startBtn.startAnimation(pulse);
         }, 1500);
+    }
+
+    @Override
+    public void goToSignInScreen() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_onboardingFragment3_to_signInFragment);
+    }
+
+    @Override
+    public void showErrorMessage(int messageId) {
+        CustomSnackBar.showSnackBar(requireView(), getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
 }

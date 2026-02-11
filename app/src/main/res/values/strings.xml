@@ -77,4 +77,8 @@
     <string name="google_sign_in_failed">Google sign in failed</string>
     <string name="google_sign_in_cancelled">Sign in was cancelled</string>
     <string name="network_connection_error">Network connection error</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="favorite">Favorite</string>
+    <string name="plan">Plan</string>
 </resources>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash_linear_bg"
-    tools:context=".presentation.welcome.onboarding.OnboardingFragment3">
+    tools:context=".presentation.welcome.onboarding.view.OnboardingFragment3">
 
 
     <androidx.constraintlayout.widget.Guideline

@@ -1,4 +1,4 @@
-package com.example.yummy_food_planner.presentation.calender.view;
+package com.example.yummy_food_planner.presentation.mealplan.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
+import com.example.yummy_food_planner.presentation.mealplan.model.MealPlanUiModel;
 import com.example.yummy_food_planner.presentation.shared.utils.GlideImageLoader;
 
 import java.util.List;
@@ -18,14 +18,14 @@ import java.util.List;
 
 public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPlanViewHolder> {
 
-    private List<MealUiModel> planMeals;
+    private List<MealPlanUiModel> planMeals;
     public onItemClickListener listener;
 
     public MealPlanAdapter(){
         listener = null;
     }
 
-    public void setData(List<MealUiModel> meals) {
+    public void setData(List<MealPlanUiModel> meals) {
         planMeals = meals;
         notifyDataSetChanged();
     }
@@ -39,18 +39,18 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPl
 
     @Override
     public void onBindViewHolder(@NonNull MealPlanViewHolder holder, int position) {
-        MealUiModel meals = planMeals.get(position);
+        MealPlanUiModel meal = planMeals.get(position);
 
-        holder.mealName.setText(meals.getName());
-        GlideImageLoader.load(holder.itemView.getContext(), meals.getImageUrl(), holder.mealImage);
+        holder.mealName.setText(meal.getName());
+        GlideImageLoader.load(holder.itemView.getContext(), meal.getImageUrl(), holder.mealImage);
 
         if (listener != null) {
             holder.itemView.setOnClickListener(v -> {
-                listener.onItemClick(meals.getId(), v);
+                listener.onItemClick(meal.getId(), v);
             });
 
             holder.deleteIcon.setOnClickListener(v -> {
-                listener.onFavIconClick(meals.getId(), v);
+                listener.onDeleteIconClick(meal.getId(), meal.getDateMillis());
             });
         }
     }
@@ -74,6 +74,6 @@ public class MealPlanAdapter extends RecyclerView.Adapter<MealPlanAdapter.MealPl
     public interface onItemClickListener {
         void onItemClick(String id, View v);
 
-        void onFavIconClick(String id, View v);
+        void onDeleteIconClick(String id, long date);
     }
 }

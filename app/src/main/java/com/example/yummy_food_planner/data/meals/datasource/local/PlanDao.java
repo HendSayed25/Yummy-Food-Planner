@@ -13,6 +13,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface PlanDao {
@@ -24,4 +25,7 @@ public interface PlanDao {
 
     @Query("DELETE FROM " + PLAN_TABLE_NAME + " WHERE mealId = :mealId AND userId = :userId AND date = :date")
     Completable deleteMeal(String mealId, Long date, String userId);
+
+    @Query("SELECT COUNT(*) FROM " + PLAN_TABLE_NAME + " WHERE mealId =:mealId AND userId=:userId")
+    Single<Integer> isMealPlaned(String mealId, String userId);
 }

@@ -94,7 +94,7 @@ public class MealPlanFragment extends Fragment implements MealPlanView {
     }
 
     private void navigateToMealDetails(String id, View view) {
-        FavoriteFragmentDirections.ActionFavoriteFragmentToMealDetailsFragment action = FavoriteFragmentDirections.actionFavoriteFragmentToMealDetailsFragment(id);
+        MealPlanFragmentDirections.ActionMealPlanFragmentToMealDetailsFragment action = MealPlanFragmentDirections.actionMealPlanFragmentToMealDetailsFragment(id);
         Navigation.findNavController(view).navigate(action);
     }
 

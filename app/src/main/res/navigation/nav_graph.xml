@@ -109,7 +109,7 @@
     </fragment>
     <fragment
         android:id="@+id/mealPlanFragment"
-        android:name="com.example.yummy_food_planner.presentation.calender.view.MealPlanFragment"
+        android:name="com.example.yummy_food_planner.presentation.mealplan.view.MealPlanFragment"
         android:label="fragment_meal_plan"
         tools:layout="@layout/fragment_meal_plan" >
         <action

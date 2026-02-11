@@ -41,7 +41,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    //navigation
     implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+    
     implementation(libs.glide)
     implementation(libs.lottie)
     implementation(platform(libs.firebase.bom))

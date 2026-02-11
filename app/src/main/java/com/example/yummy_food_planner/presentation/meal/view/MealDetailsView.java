@@ -31,4 +31,5 @@ public interface MealDetailsView {
     void deleteFromFav();
     void showAddedToMealPlanIcon();
     void showAddToPlanIcon();
+    void showGuestDialog();
 }

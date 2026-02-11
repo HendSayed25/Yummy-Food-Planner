@@ -2,7 +2,6 @@ package com.example.yummy_food_planner.presentation.meal.view;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-
 import static com.example.yummy_food_planner.presentation.shared.utils.CalenderUtils.getSelectedDateInMillis;
 
 import android.app.DatePickerDialog;
@@ -19,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.yummy_food_planner.R;
@@ -27,6 +27,7 @@ import com.example.yummy_food_planner.presentation.meal.model.MealDetailsUiModel
 import com.example.yummy_food_planner.presentation.meal.presenter.MealDetailsPresenter;
 import com.example.yummy_food_planner.presentation.meal.presenter.MealDetailsPresenterImp;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomDialog;
 import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.example.yummy_food_planner.presentation.shared.utils.GlideImageLoader;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
@@ -75,8 +76,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         ingredientTitle = view.findViewById(R.id.tvIngredients);
         instructionTitle = view.findViewById(R.id.tvInstructionsTitle);
         youtubeSectionTitle = view.findViewById(R.id.tvYoutubeTitle);
-//        isPlanned = presenter.
-
         adapter = new MealIngredientsAdapter();
         presenter = new MealDetailsPresenterImp(getContext(), this);
 
@@ -93,18 +92,8 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
             }
         });
 
-        addToFav.setOnClickListener(v -> {
-            isFavorite = !isFavorite;
-            updateHeartIcon(isFavorite);
-
-            if (isFavorite) {
-                presenter.addToFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
-            } else {
-                presenter.deleteFromFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
-            }
-        });
-
-        addToCalender.setOnClickListener(v -> showDatePicker());
+        addToFav.setOnClickListener(v -> presenter.isUserGuest(this::onFavClick));
+        addToCalender.setOnClickListener(v -> presenter.isUserGuest(this::showDatePicker));
     }
 
     private void showDatePicker() {
@@ -154,7 +143,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
             @Override
             public void onReady(@NonNull YouTubePlayer youTubePlayer) {
                 myYouTubePlayer = youTubePlayer;
-                myYouTubePlayer.cueVideo(videoId, 0);
+
+                if (videoId != null && !videoId.isEmpty()) {
+                    youTubePlayer.cueVideo(videoId, 0);
+                }
             }
         });
     }
@@ -219,6 +211,28 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     @Override
     public void showAddToPlanIcon() {
         addToCalender.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_add_to_plan));
+    }
+
+
+    public void onFavClick() {
+        isFavorite = !isFavorite;
+        updateHeartIcon(isFavorite);
+
+        if (isFavorite) {
+            presenter.addToFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
+        } else {
+            presenter.deleteFromFavorite(new MealUiModel(currentMeal.getName(), currentMeal.getMealImageUrl(), currentMeal.getId()));
+        }
+    }
+
+    @Override
+    public void showGuestDialog() {
+        CustomDialog.showDialog(requireContext(),
+                getString(R.string.sign_in_required),
+                getString(R.string.you_are_browsing_as_a_guest_please_sign_in_to_continue),
+                getString(R.string.sign_in),
+                getString(R.string.cancel),
+                () -> NavHostFragment.findNavController(this).navigate(R.id.action_mealDetailsFragment_to_signInFragment));
     }
 
     private void updateHeartIcon(boolean isFav) {

@@ -112,6 +112,9 @@
         <argument
             android:name="mealId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_mealDetailsFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/mealPlanFragment"
@@ -121,6 +124,9 @@
         <action
             android:id="@+id/action_mealPlanFragment_to_mealDetailsFragment"
             app:destination="@id/mealDetailsFragment" />
+        <action
+            android:id="@+id/action_mealPlanFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
 
 </navigation>

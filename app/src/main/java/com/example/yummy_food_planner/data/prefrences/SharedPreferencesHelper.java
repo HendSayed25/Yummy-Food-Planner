@@ -12,6 +12,7 @@ public class SharedPreferencesHelper {
     private final String USER_NAME = "userName";
     private final String IS_LOGGED_IN = "loggedIn";
     private final String IS_FIRST_TIME = "firstTime";
+    private final String IS_USER_GUEST = "guest";
 
     private SharedPreferencesHelper(Context context) {
         sharedPreferences = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -57,6 +58,14 @@ public class SharedPreferencesHelper {
 
     public Boolean isFirstTime() {
         return sharedPreferences.getBoolean(IS_FIRST_TIME, true);
+    }
+
+    public Boolean isUserGuest() {
+        return sharedPreferences.getBoolean(IS_USER_GUEST, false);
+    }
+
+    public void setGuestState(Boolean state) {
+        editor.putBoolean(IS_USER_GUEST, state).apply();
     }
 
     public void logout() {

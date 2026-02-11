@@ -59,6 +59,20 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
     }
 
     @Override
+    public void isUserGuest(Long date) {
+        compositeDisposable.add(
+                authRepository.isUserGuest().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                state -> {
+                                    if (state) view.showGuestDialog();
+                                    else view.userNotAGuest(date);
+                                }
+                        )
+        );
+    }
+
+    @Override
     public void onDestroy() {
         compositeDisposable.clear();
     }

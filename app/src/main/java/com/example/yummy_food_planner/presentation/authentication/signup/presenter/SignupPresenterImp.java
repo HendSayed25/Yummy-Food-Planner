@@ -47,6 +47,7 @@ public class SignupPresenterImp implements SignupPresenter {
                         .flatMapCompletable(user ->
                                 repository.saveUserData(user)
                                         .andThen(repository.setLoggedIn())
+                                        .andThen(repository.setGuestState(false))
                                         .andThen(Completable.fromAction(() -> view.onSignupSuccess())))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

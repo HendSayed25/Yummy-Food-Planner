@@ -12,6 +12,7 @@ import androidx.annotation.StringRes;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +87,7 @@ public class SignUpFragment extends Fragment implements SignupView {
 
     @Override
     public void onSignupSuccess() {
-        Navigation.findNavController(getView()).navigate(R.id.action_signUpFragment_to_homeFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.action_signUpFragment_to_homeFragment);
     }
 
     @Override

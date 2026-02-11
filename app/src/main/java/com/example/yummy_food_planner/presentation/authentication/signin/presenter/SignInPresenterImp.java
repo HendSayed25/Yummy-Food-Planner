@@ -79,6 +79,7 @@ public class SignInPresenterImp implements SignInPresenter {
                             .flatMapCompletable(user ->
                                     repository.saveUserData(user)
                                             .andThen(repository.setLoggedIn())
+                                            .andThen(repository.setGuestState(false))
                                             .andThen(Completable.fromAction(() -> view.onSignInSuccess()))
                             ).observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
@@ -111,6 +112,20 @@ public class SignInPresenterImp implements SignInPresenter {
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(
                                 () -> view.onSignInSuccess(),
                                 this::handleError
+                        )
+        );
+    }
+
+    @Override
+    public void signInAsGuest() {
+        compositeDisposable.add(
+                repository.signInAnonymously()
+                        .flatMapCompletable(uid -> repository.setGuestState(true))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> view.onSignInSuccess(),
+                                throwable -> view.showError(R.string.something_went_wrong, SignInErrorType.GENERAL)
                         )
         );
     }

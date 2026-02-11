@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/blue_primary"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        tools:text="@string/sign_in_required"
+        android:textColor="@color/logo_bg"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/messageTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins_regular"
+        tools:text="@string/you_are_browsing_as_a_guest_please_sign_in_to_continue"
+        android:textColor="@color/logo_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titleTv" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancelBtn"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/shape_guest_button"
+        android:fontFamily="@font/poppins_bold"
+        tools:text="@string/cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/logo_bg"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@id/signInBtnFromGuestMode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/messageTv" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/signInBtnFromGuestMode"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/custom_btn_onboarding"
+        android:fontFamily="@font/poppins_bold"
+        tools:text="@string/sign_in"
+        android:textAllCaps="false"
+        android:textColor="@color/blue_dark"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cancelBtn"
+        app:layout_constraintTop_toBottomOf="@id/messageTv" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,4 +70,19 @@ public class AuthRemoteDatasource {
         }
         return null;
     }
+
+    public Single<String> signInAnonymously() {
+        return Single.create(emitter -> {
+            FirebaseAuth.getInstance().signInAnonymously()
+                    .addOnSuccessListener(authResult -> {
+                        FirebaseUser user = authResult.getUser();
+                        if (user != null) {
+                            emitter.onSuccess(user.getUid());
+                        } else {
+                            emitter.onError(new Exception("Guest login failed: User is null"));
+                        }
+                    })
+                    .addOnFailureListener(emitter::onError);
+        });
+    }
 }

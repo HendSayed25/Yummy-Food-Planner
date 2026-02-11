@@ -9,5 +9,6 @@ public interface MealDetailsPresenter {
     void addToPlan(MealUiModel meal, Long date);
     void checkIfFavorite(String mealId);
     void checkIfPlanned(String mealId);
+    void isUserGuest(Runnable actionIfNotGuest);
     void onDestroy();
 }

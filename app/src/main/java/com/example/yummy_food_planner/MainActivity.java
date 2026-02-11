@@ -2,13 +2,19 @@ package com.example.yummy_food_planner;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,17 +30,27 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment_container);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        auth.createUserWithEmailAndPassword(
-                "test@mail.com",
-                "123456"
-        ).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Log.d("AUTH", "User created successfully");
+
+        if (navHostFragment != null) {
+            NavController navController = getNavController(navHostFragment, bottomNavigationView);
+            NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        }
+    }
+
+    @NonNull
+    private static NavController getNavController(NavHostFragment navHostFragment, BottomNavigationView bottomNavigationView) {
+        NavController navController = navHostFragment.getNavController();
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.onboardingFragment1 || destination.getId() == R.id.onboardingFragment2 ||destination.getId() == R.id.onboardingFragment3 || destination.getId() == R.id.splashFragment ||  destination.getId() == R.id.signInFragment ||  destination.getId() == R.id.signUpFragment) {
+                bottomNavigationView.setVisibility(View.GONE);
             } else {
-                Log.e("AUTH", task.getException().getMessage());
+                bottomNavigationView.setVisibility(View.VISIBLE);
             }
         });
+        return navController;
     }
 }

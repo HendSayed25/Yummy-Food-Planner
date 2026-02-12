@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -18,19 +19,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.yummy_food_planner.R;
-import com.example.yummy_food_planner.presentation.favorite.view.FavoriteFragmentDirections;
 import com.example.yummy_food_planner.presentation.mealplan.model.MealPlanUiModel;
 import com.example.yummy_food_planner.presentation.mealplan.presenter.MealPlanPresenter;
 import com.example.yummy_food_planner.presentation.mealplan.presenter.MealPlanPresenterImp;
-import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
-import com.example.yummy_food_planner.presentation.shared.utils.CalenderUtils;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomDialog;
 import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -72,7 +69,7 @@ public class MealPlanFragment extends Fragment implements MealPlanView {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 dateInMillis = getSelectedDateInMillis(year, month, dayOfMonth);
-                presenter.getPlannedMealsByData(dateInMillis);
+                presenter.isUserGuest(dateInMillis);
             }
         });
 
@@ -88,7 +85,13 @@ public class MealPlanFragment extends Fragment implements MealPlanView {
 
             @Override
             public void onDeleteIconClick(String id, long date) {
-                presenter.deleteMealFromPlan(id, date);
+                CustomDialog.showDialog(
+                        requireContext(),
+                        getString(R.string.delete_item_from_plan),
+                        getString(R.string.are_you_sure_you_want_to_delete_this_meal),
+                        getString(R.string.delete),
+                        getString(R.string.cancel),
+                        () -> presenter.deleteMealFromPlan(id, date));
             }
         };
     }
@@ -116,8 +119,17 @@ public class MealPlanFragment extends Fragment implements MealPlanView {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
+    public void showGuestDialog() {
+        CustomDialog.showDialog(requireContext(),
+                getString(R.string.sign_in_required),
+                getString(R.string.you_are_browsing_as_a_guest_please_sign_in_to_continue),
+                getString(R.string.sign_in),
+                getString(R.string.cancel),
+                () -> NavHostFragment.findNavController(this).navigate(R.id.action_mealPlanFragment_to_signInFragment));
+    }
+
+    @Override
+    public void userNotAGuest(Long date) {
+        presenter.getPlannedMealsByData(date);
     }
 }

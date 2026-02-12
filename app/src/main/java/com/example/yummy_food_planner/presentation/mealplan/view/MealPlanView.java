@@ -7,4 +7,6 @@ import java.util.List;
 public interface MealPlanView {
     void showMeals(List<MealPlanUiModel> meals);
     void showMessage(int messageId);
+    void showGuestDialog();
+    void userNotAGuest(Long date);
 }

@@ -85,7 +85,7 @@ public class SignInFragment extends Fragment implements SignInView {
 
     @Override
     public void onSignInSuccess() {
-        Navigation.findNavController(getView()).navigate(R.id.action_signInFragment_to_homeFragment);
+        NavHostFragment.findNavController(this).navigate(R.id.action_signInFragment_to_homeFragment);
     }
 
     @Override
@@ -116,6 +116,6 @@ public class SignInFragment extends Fragment implements SignInView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

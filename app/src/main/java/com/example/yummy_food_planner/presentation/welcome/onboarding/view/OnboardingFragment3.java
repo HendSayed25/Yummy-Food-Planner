@@ -81,8 +81,8 @@ public class OnboardingFragment3 extends BaseOnboardingFragment implements Onboa
         fadeIn.setStartOffset(700);
         dotContainer.startAnimation(fadeIn);
 
-        Animation zoomInRotate = AnimationUtils.loadAnimation(requireContext(), R.anim.zoom_in_rotate);
-        zoomInRotate.setStartOffset(900);
+        Animation zoomInRotate = AnimationUtils.loadAnimation(requireContext(), R.anim.onboarding_fade_in);
+        zoomInRotate.setStartOffset(800);
         startBtn.startAnimation(zoomInRotate);
 
         backBtn.startAnimation(zoomInRotate);
@@ -101,5 +101,11 @@ public class OnboardingFragment3 extends BaseOnboardingFragment implements Onboa
     @Override
     public void showErrorMessage(int messageId) {
         CustomSnackBar.showSnackBar(requireView(), getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

@@ -98,6 +98,6 @@ public class SignUpFragment extends Fragment implements SignupView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

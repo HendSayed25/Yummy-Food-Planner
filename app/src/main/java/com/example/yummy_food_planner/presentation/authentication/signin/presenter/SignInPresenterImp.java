@@ -27,11 +27,11 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SignInPresenterImp implements SignInPresenter {
 
-    private AuthRepository repository;
-    private SignInView view;
-    private Context context;
+    private final AuthRepository repository;
+    private final SignInView view;
+    private final Context context;
     private GoogleSignInClient googleSignInClient;
-    private CompositeDisposable compositeDisposable;
+    private final CompositeDisposable compositeDisposable;
 
     public SignInPresenterImp(SignInView view, Context context) {
         repository = new AuthRepositoryImp(context);

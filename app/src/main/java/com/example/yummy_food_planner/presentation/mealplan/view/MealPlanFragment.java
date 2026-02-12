@@ -132,4 +132,10 @@ public class MealPlanFragment extends Fragment implements MealPlanView {
     public void userNotAGuest(Long date) {
         presenter.getPlannedMealsByData(date);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) presenter.onDestroy();
+    }
 }

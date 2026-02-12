@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.search.presenter.SearchPresenter;
 import com.example.yummy_food_planner.presentation.search.presenter.SearchPresenterImp;
@@ -45,6 +47,9 @@ public class SearchFragment extends Fragment implements SearchViews {
     private View noInternetLayout;
     private SearchPresenter presenter;
     private AppCompatButton retryBtn;
+    private LottieAnimationView emptyStateAnimation;
+    private TextView emptyStateText ;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +68,8 @@ public class SearchFragment extends Fragment implements SearchViews {
         loading = view.findViewById(R.id.loadingSearch);
         noInternetLayout = view.findViewById(R.id.noInternetLayoutSearch);
         retryBtn = noInternetLayout.findViewById(R.id.retryButton);
+        emptyStateAnimation = view.findViewById(R.id.emptyStateAnimation);
+        emptyStateText = view.findViewById(R.id.emptyStateText);
         presenter = new SearchPresenterImp(this, getContext());
 
         chipCategory.setChecked(true);
@@ -174,8 +181,17 @@ public class SearchFragment extends Fragment implements SearchViews {
 
     @Override
     public void showMeals(List<MealUiModel> meals, RecyclerListType type) {
-        searchAdapter.setData(meals);
-        searchAdapter.setType(type);
+        if(meals.isEmpty()) {
+            emptyStateAnimation.setVisibility(View.VISIBLE);
+            searchResultRecycler.setVisibility(View.GONE);
+            emptyStateText.setVisibility(VISIBLE);
+        } else {
+            emptyStateAnimation.setVisibility(View.GONE);
+            searchResultRecycler.setVisibility(View.VISIBLE);
+            emptyStateText.setVisibility(GONE);
+            searchAdapter.setData(meals);
+            searchAdapter.setType(type);
+        }
     }
 
     @Override
@@ -206,5 +222,11 @@ public class SearchFragment extends Fragment implements SearchViews {
     @Override
     public void noInternet() {
         noInternetLayout.setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

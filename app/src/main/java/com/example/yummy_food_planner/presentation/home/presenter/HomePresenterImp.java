@@ -21,10 +21,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class HomePresenterImp implements HomePresenter {
 
-    private MealRepository repository;
-    private CompositeDisposable compositeDisposable;
-    private HomeView view;
-    private Context context;
+    private final MealRepository repository;
+    private final CompositeDisposable compositeDisposable;
+    private final HomeView view;
+    private final Context context;
 
     public HomePresenterImp(HomeView view, Context context) {
         this.view = view;

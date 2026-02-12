@@ -4,6 +4,7 @@ import static com.example.yummy_food_planner.presentation.search.utils.FlagsUtil
 import static com.example.yummy_food_planner.presentation.shared.mapper.Mapper.mapToUiList;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Pair;
 
 import com.example.yummy_food_planner.R;
@@ -32,10 +33,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchPresenterImp implements SearchPresenter {
 
-    private MealRepository mealRepository;
-    private SearchViews view;
-    private Context context;
-    private CompositeDisposable compositeDisposable;
+    private final MealRepository mealRepository;
+    private final SearchViews view;
+    private final Context context;
+    private final CompositeDisposable compositeDisposable;
     private Filter selectedFilterType = Filter.CATEGORY;
     private String selectedValue = "";
     private List<MealUiModel> originalList;
@@ -105,22 +106,19 @@ public class SearchPresenterImp implements SearchPresenter {
                                     MealResponse response = (MealResponse) pair.second;
 
                                     if (searchText.isEmpty()) {
-                                        view.showMeals(originalList,RecyclerListType.MEAL);
+                                        view.showMeals(originalList, RecyclerListType.MEAL);
                                         return;
                                     }
 
                                     List<MealDto> filtered = getList(response.getMeals(), searchText);
+                                    if (filtered.isEmpty()) { // means -> user search for meal by name without filter
+                                        filtered = response.getMeals().stream().filter(meal -> meal.getStrMeal().contains(searchText)).collect(Collectors.toList());
+                                    }
                                     view.showMeals(mapToUiList(filtered,
                                             meal -> new MealUiModel(meal.getStrMeal(), meal.getStrMealThumb(), meal.getIdMeal())), RecyclerListType.MEAL);
 
                                 },
-                                error -> {
-                                    if (error instanceof IOException) {
-                                        view.noInternet();
-                                    } else {
-                                        view.showError(R.string.no_meals_found_with_this_name);
-                                    }
-                                }
+                                error -> view.showError(R.string.no_meals_found_with_this_name)
                         )
         );
     }
@@ -145,6 +143,8 @@ public class SearchPresenterImp implements SearchPresenter {
                         case COUNTRY:
                             matchesChip = meal.getStrArea().equals(selectedValue);
                             break;
+
+
                     }
 
                     return matchesSearch && matchesChip;
@@ -179,7 +179,7 @@ public class SearchPresenterImp implements SearchPresenter {
                                                     ""
                                             )
                                     );
-                                    view.showMeals(countries,RecyclerListType.CATEGORY);
+                                    view.showMeals(countries, RecyclerListType.CATEGORY);
                                     originalList = countries;
                                 },
                                 error -> {
@@ -220,7 +220,7 @@ public class SearchPresenterImp implements SearchPresenter {
                                                     category.getId()
                                             )
                                     );
-                                    view.showMeals(categories,RecyclerListType.CATEGORY);
+                                    view.showMeals(categories, RecyclerListType.CATEGORY);
                                     originalList = categories;
                                 },
                                 error -> {
@@ -262,7 +262,7 @@ public class SearchPresenterImp implements SearchPresenter {
                                                     ingredient.getId()
                                             )
                                     );
-                                    view.showMeals(ingredients,RecyclerListType.CATEGORY);
+                                    view.showMeals(ingredients, RecyclerListType.CATEGORY);
                                     originalList = ingredients;
                                 },
                                 error -> {
@@ -305,7 +305,7 @@ public class SearchPresenterImp implements SearchPresenter {
                                                     meal.getIdMeal()
                                             )
                                     );
-                                    view.showMeals(meals,RecyclerListType.MEAL);
+                                    view.showMeals(meals, RecyclerListType.MEAL);
                                     originalList = meals;
                                 },
                                 error -> {

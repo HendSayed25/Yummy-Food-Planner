@@ -19,10 +19,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SignupPresenterImp implements SignupPresenter {
 
-    private SignupView view;
-    private Context context;
-    private AuthRepository repository;
-    private CompositeDisposable compositeDisposable;
+    private final SignupView view;
+    private final Context context;
+    private final AuthRepository repository;
+    private final CompositeDisposable compositeDisposable;
 
     public SignupPresenterImp(SignupView view, Context context) {
         this.view = view;
@@ -48,7 +48,8 @@ public class SignupPresenterImp implements SignupPresenter {
                                 repository.saveUserData(user)
                                         .andThen(repository.setLoggedIn())
                                         .andThen(repository.setGuestState(false))
-                                        .andThen(Completable.fromAction(() -> view.onSignupSuccess())))
+                                        .andThen(repository.setIsNotFirstTime())
+                                        .andThen(Completable.fromAction(view::onSignupSuccess)))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

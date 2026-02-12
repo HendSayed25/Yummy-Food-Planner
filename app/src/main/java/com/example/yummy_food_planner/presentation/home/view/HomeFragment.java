@@ -148,6 +148,6 @@ public class HomeFragment extends Fragment implements HomeView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

@@ -18,10 +18,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MealPlanPresenterImp implements MealPlanPresenter {
 
-    private MealRepository mealRepository;
-    private AuthRepository authRepository;
-    private CompositeDisposable compositeDisposable;
-    private MealPlanView view;
+    private final MealRepository mealRepository;
+    private final AuthRepository authRepository;
+    private final CompositeDisposable compositeDisposable;
+    private final MealPlanView view;
 
     public MealPlanPresenterImp(Context context, MealPlanView view) {
         this.view = view;

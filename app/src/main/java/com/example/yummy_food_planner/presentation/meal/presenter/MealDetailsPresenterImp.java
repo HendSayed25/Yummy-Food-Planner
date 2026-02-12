@@ -160,6 +160,20 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
 
     }
 
+    @Override
+    public void isUserGuest(Runnable actionIfNotGuest) {
+        compositeDisposable.add(
+                authRepository.isUserGuest().subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                state -> {
+                                    if (state) view.showGuestDialog();
+                                    else actionIfNotGuest.run();
+                                }
+                        )
+        );
+    }
+
     private void extractDetails(MealResponse meal) {
         view.showInstructions(meal.getMeals().get(0).getStrInstructions());
         getIngredients(meal);

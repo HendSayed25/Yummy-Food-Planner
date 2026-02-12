@@ -80,6 +80,21 @@ public class AuthRepositoryImp implements AuthRepository {
         return Completable.fromAction(localDataSource::setIsNotFirstTime);
     }
 
+    @Override
+    public Single<String> signInAnonymously() {
+        return remoteDatasource.signInAnonymously();
+    }
+
+    @Override
+    public Single<Boolean> isUserGuest() {
+        return Single.fromCallable(localDataSource::isUserGuest);
+    }
+
+    @Override
+    public Completable setGuestState(Boolean state) {
+        return Completable.fromAction(()->localDataSource.setGuestState(state));
+    }
+
     private String generateNameFromEmail(String email) {
         if (email == null || !email.contains("@")) return "User";
 

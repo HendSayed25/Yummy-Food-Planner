@@ -28,4 +28,9 @@ public interface AuthRepository {
     Completable setLoggedIn();
 
     Completable setIsNotFirstTime();
+
+    Single<String> signInAnonymously();
+
+    Single<Boolean> isUserGuest();
+    Completable setGuestState(Boolean state);
 }

@@ -40,6 +40,14 @@ public class AuthLocalDataSource {
         return pref.isFirstTime();
     }
 
+    public Boolean isUserGuest() {
+        return pref.isUserGuest();
+    }
+
+    public void setGuestState(Boolean state) {
+        pref.setGuestState(state);
+    }
+
     public void logOut() {
         pref.logout();
     }

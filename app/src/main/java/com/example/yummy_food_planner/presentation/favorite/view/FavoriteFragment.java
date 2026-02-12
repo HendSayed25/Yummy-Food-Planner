@@ -21,6 +21,7 @@ import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.favorite.presenter.FavoritePresenter;
 import com.example.yummy_food_planner.presentation.favorite.presenter.FavoritePresenterImp;
 import com.example.yummy_food_planner.presentation.shared.model.MealUiModel;
+import com.example.yummy_food_planner.presentation.shared.utils.CustomDialog;
 import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
@@ -63,7 +64,13 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
 
             @Override
             public void onFavIconClick(String id) {
-                presenter.deleteFromFavorite(id);
+                CustomDialog.showDialog(
+                        requireContext(),
+                        getString(R.string.delete_item_from_fav),
+                        getString(R.string.are_you_sure_you_want_to_delete_this_meal),
+                        getString(R.string.delete),
+                        getString(R.string.cancel),
+                        () -> presenter.deleteFromFavorite(id));
             }
         };
     }
@@ -78,10 +85,10 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
         favMealAdapter.setData(meals);
         favRecycler.setAdapter(favMealAdapter);
 
-        if(meals.isEmpty()){
+        if (meals.isEmpty()) {
             screenTitle.setVisibility(GONE);
             noFavoritesLayout.setVisibility(VISIBLE);
-        }else{
+        } else {
             screenTitle.setVisibility(VISIBLE);
             noFavoritesLayout.setVisibility(GONE);
         }

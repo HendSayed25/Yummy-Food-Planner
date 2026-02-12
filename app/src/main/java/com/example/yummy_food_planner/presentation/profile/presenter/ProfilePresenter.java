@@ -4,5 +4,6 @@ public interface ProfilePresenter {
     void logOut();
     void getUserData();
     void isUserGuest();
+    void syncUserData();
     void onDestroy();
 }

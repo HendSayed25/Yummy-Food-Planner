@@ -72,7 +72,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/poppins_semibold"
-        android:textColor="@color/blue_primary"
+        android:textColor="@color/blue_dark"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/userNameTv"
         app:layout_constraintTop_toBottomOf="@id/welcomeMessage"
@@ -97,11 +97,40 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/poppins_semibold"
-        android:textColor="@color/blue_primary"
+        android:textColor="@color/blue_dark"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/emailTv"
         app:layout_constraintTop_toBottomOf="@id/userNameValue"
         tools:text="hend@gmail.com" />
+
+    <TextView
+        android:id="@+id/suggestMessgae"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/we_recommend_you_to_sync_your_data_to_can_see_your_favorties_and_planned_meal_in_any_device"
+        android:textColor="@color/blue_dark"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emailValue" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/syncBtn"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginVertical="20dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/sync_button_shape"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/sync_your_data"
+        android:textAllCaps="false"
+        android:textColor="@color/blue_primary"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/suggestMessgae" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/logOutBtn"

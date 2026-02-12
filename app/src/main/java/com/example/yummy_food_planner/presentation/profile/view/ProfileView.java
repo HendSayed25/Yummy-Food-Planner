@@ -5,5 +5,7 @@ public interface ProfileView {
     void showError(int messageId);
     void userIsGuest();
     void userNotAGuest();
+    void syncDataSuccessfully();
+    void noInternet();
     void logOut();
 }

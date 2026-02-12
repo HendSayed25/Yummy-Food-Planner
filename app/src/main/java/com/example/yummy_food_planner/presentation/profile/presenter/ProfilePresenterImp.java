@@ -5,6 +5,8 @@ import android.content.Context;
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepository;
 import com.example.yummy_food_planner.data.authentication.datasource.repository.AuthRepositoryImp;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
+import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.presentation.profile.view.ProfileView;
 import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
@@ -16,6 +18,7 @@ public class ProfilePresenterImp implements ProfilePresenter {
 
     private CompositeDisposable compositeDisposable;
     private AuthRepository repository;
+    private MealRepository mealRepository;
     private ProfileView view;
     private Context context;
 
@@ -24,6 +27,7 @@ public class ProfilePresenterImp implements ProfilePresenter {
         this.context = context;
         compositeDisposable = new CompositeDisposable();
         repository = new AuthRepositoryImp(context);
+        mealRepository = new MealsRepositoryImp(context);
     }
 
     @Override
@@ -59,9 +63,27 @@ public class ProfilePresenterImp implements ProfilePresenter {
                                 isGuest -> {
                                     if (isGuest) {
                                         view.userIsGuest();
-                                        view.showUserData("Guest","guest@gmail.com");
-                                    }
-                                    else view.userNotAGuest();
+                                        view.showUserData("Guest", "guest@gmail.com");
+                                    } else view.userNotAGuest();
+                                }
+                        )
+        );
+    }
+
+    @Override
+    public void syncUserData() {
+
+        if(!NetworkCheck.isNetworkAvailable(context)){
+            view.noInternet();
+            return;
+        }
+
+        compositeDisposable.add(
+                mealRepository.syncUserData().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                () -> view.syncDataSuccessfully(),
+                                error -> {
+                                    view.showError(R.string.something_went_wrong);
                                 }
                         )
         );

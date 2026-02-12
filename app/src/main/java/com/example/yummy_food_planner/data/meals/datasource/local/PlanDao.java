@@ -28,4 +28,7 @@ public interface PlanDao {
 
     @Query("SELECT COUNT(*) FROM " + PLAN_TABLE_NAME + " WHERE mealId =:mealId AND userId=:userId")
     Single<Integer> isMealPlaned(String mealId, String userId);
+
+    @Query("SELECT * FROM "+ PLAN_TABLE_NAME)
+    Single<List<Plan>> getAllMealPlans();
 }

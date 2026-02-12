@@ -20,7 +20,7 @@ import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 
 public class ProfileFragment extends Fragment implements ProfileView {
 
-    private AppCompatButton logOutBtn;
+    private AppCompatButton logOutBtn, syncBtn;
     private ProfilePresenter presenter;
     private TextView usernameValue, emailValue;
 
@@ -37,11 +37,14 @@ public class ProfileFragment extends Fragment implements ProfileView {
         logOutBtn = view.findViewById(R.id.logOutBtn);
         usernameValue = view.findViewById(R.id.userNameValue);
         emailValue = view.findViewById(R.id.emailValue);
+        syncBtn = view.findViewById(R.id.syncBtn);
         presenter = new ProfilePresenterImp(getContext(), this);
 
         presenter.isUserGuest();
 
         logOutBtn.setOnClickListener(v -> presenter.logOut());
+
+        syncBtn.setOnClickListener(v -> presenter.syncUserData());
     }
 
     @Override
@@ -64,6 +67,16 @@ public class ProfileFragment extends Fragment implements ProfileView {
     public void userNotAGuest() {
         presenter.getUserData();
         logOutBtn.setText(R.string.log_out);
+    }
+
+    @Override
+    public void syncDataSuccessfully() {
+        CustomSnackBar.showSnackBar(requireView(), getString(R.string.sync_data_successfully), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+    }
+
+    @Override
+    public void noInternet() {
+        CustomSnackBar.showSnackBar(requireView(), getString(R.string.no_internet), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
 
     @Override

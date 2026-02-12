@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.yummy_food_planner.R;
 import com.example.yummy_food_planner.presentation.authentication.signin.presenter.SignInPresenter;
@@ -78,8 +79,7 @@ public class SignInFragment extends Fragment implements SignInView {
 
 
         guestBtn.setOnClickListener(v->{
-            ///TODO restrict it's action
-            Navigation.findNavController(getView()).navigate(R.id.action_signInFragment_to_homeFragment);
+            presenter.signInAsGuest();
         });
     }
 

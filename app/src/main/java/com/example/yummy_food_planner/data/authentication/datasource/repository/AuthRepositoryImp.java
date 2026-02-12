@@ -2,6 +2,7 @@ package com.example.yummy_food_planner.data.authentication.datasource.repository
 
 
 import android.content.Context;
+import android.util.Pair;
 
 import com.example.yummy_food_planner.data.authentication.datasource.local.AuthLocalDataSource;
 import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthRemoteDatasource;
@@ -41,7 +42,7 @@ public class AuthRepositoryImp implements AuthRepository {
         user.setUsername(generateNameFromEmail(user.getEmail()));
 
         return Completable.fromAction(() ->
-                localDataSource.saveUserData(user.getId(), user.getUsername())
+                localDataSource.saveUserData(user.getId(), user.getUsername(), user.getEmail())
         );
     }
 
@@ -56,8 +57,8 @@ public class AuthRepositoryImp implements AuthRepository {
     }
 
     @Override
-    public Single<String> getUserName() {
-        return Single.fromCallable(localDataSource::getUserName);
+    public Single<Pair<String, String>> getUserData() {
+        return Single.just(new Pair<>(localDataSource.getUserName(), localDataSource.getUserEmail()));
     }
 
     @Override
@@ -67,7 +68,8 @@ public class AuthRepositoryImp implements AuthRepository {
 
     @Override
     public Completable logout() {
-        return Completable.fromAction(localDataSource::logOut);
+        return remoteDatasource.logOut()
+                .andThen(Completable.fromAction(() -> localDataSource.logOut()));
     }
 
     @Override
@@ -92,7 +94,7 @@ public class AuthRepositoryImp implements AuthRepository {
 
     @Override
     public Completable setGuestState(Boolean state) {
-        return Completable.fromAction(()->localDataSource.setGuestState(state));
+        return Completable.fromAction(() -> localDataSource.setGuestState(state));
     }
 
     private String generateNameFromEmail(String email) {

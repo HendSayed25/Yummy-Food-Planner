@@ -11,9 +11,10 @@ public class AuthLocalDataSource {
         pref = SharedPreferencesHelper.getInstance(context);
     }
 
-    public void saveUserData(String id, String name) {
+    public void saveUserData(String id, String name, String email) {
         pref.saveUserId(id);
         pref.saveUserName(name);
+        pref.saveUserEmail(email);
     }
 
     public String getUserID() {
@@ -22,6 +23,10 @@ public class AuthLocalDataSource {
 
     public String getUserName() {
         return pref.getUserName();
+    }
+
+    public String getUserEmail() {
+        return pref.getUserEmail();
     }
 
     public Boolean isLoggedIn() {

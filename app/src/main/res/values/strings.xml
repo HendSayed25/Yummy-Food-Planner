@@ -90,4 +90,20 @@
         Are you sure you want to delete this meal?
     </string>
     <string name="delete">Delete</string>
+    <string name="profile">Profile</string>
+    <string name="user_name">User Name : </string>
+    <string name="logo_icon">logo_icon</string>
+    <string name="your_email">Your Email :</string>
+    <string name="email_profile">Email :</string>
+    <string name="profile_menu"><![CDATA[profile /> </menu>]]></string>
+    <string name="change">change</string>
+    <string name="log_out">Log out</string>
+    <string name="hello_my_chef_ni_hope_you_are_happy_with_our_meals">Hello My Chef !\nI hope you are happy with our meals</string>
+    <string name="name">Name :</string>
+    <string name="updated_successfully">Updated Successfully</string>
+    <string name="update_name_message_with_no_internet">No Internet Connection. Please check it to update your name..</string>
+    <string name="save">Save</string>
+    <string name="update_name">Update Name</string>
+    <string name="enter_new_name">Enter new name</string>
+    <string name="enter_valid_username">Name cannot be empty</string>
 </resources>

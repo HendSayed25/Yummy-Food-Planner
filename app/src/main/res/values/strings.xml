@@ -109,4 +109,5 @@
     <string name="sync_your_data">Sync your data</string>
     <string name="sync_data_successfully">Data synced Successfully !</string>
     <string name="we_recommend_you_to_sync_your_data_to_can_see_your_favorties_and_planned_meal_in_any_device">We recommend you to sync your data to can see your favorties and planned meal in any device.</string>
+    <string name="no_meal_with_this_name">No meal with this name</string>
 </resources>

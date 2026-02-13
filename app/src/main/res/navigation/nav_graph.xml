@@ -128,5 +128,13 @@
             android:id="@+id/action_mealPlanFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.yummy_food_planner.presentation.profile.view.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
 
 </navigation>

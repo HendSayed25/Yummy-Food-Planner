@@ -17,5 +17,9 @@
         android:id="@+id/mealPlanFragment"
         android:icon="@drawable/ic_plan_nav"
         android:title="@string/plan" />
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile_nav"
+        android:title="@string/profile"/>
 
 </menu>

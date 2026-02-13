@@ -85,4 +85,8 @@ public class AuthRemoteDatasource {
                     .addOnFailureListener(emitter::onError);
         });
     }
+
+    public Completable logOut() {
+        return Completable.fromAction(() -> auth.signOut());
+    }
 }

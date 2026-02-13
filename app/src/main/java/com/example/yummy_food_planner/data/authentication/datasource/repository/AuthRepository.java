@@ -1,5 +1,7 @@
 package com.example.yummy_food_planner.data.authentication.datasource.repository;
 
+import android.util.Pair;
+
 import com.example.yummy_food_planner.data.authentication.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
@@ -15,11 +17,11 @@ public interface AuthRepository {
 
     Completable saveUserData(User user);
 
+    Single<Pair<String, String>> getUserData();
+
     Single<Boolean> isUserLoggedIn();
 
     Single<Boolean> isFirstTime();
-
-    Single<String> getUserName();
 
     Single<String> getUserId();
 
@@ -32,5 +34,6 @@ public interface AuthRepository {
     Single<String> signInAnonymously();
 
     Single<Boolean> isUserGuest();
+
     Completable setGuestState(Boolean state);
 }

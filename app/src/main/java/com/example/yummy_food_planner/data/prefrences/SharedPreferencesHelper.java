@@ -13,6 +13,7 @@ public class SharedPreferencesHelper {
     private final String IS_LOGGED_IN = "loggedIn";
     private final String IS_FIRST_TIME = "firstTime";
     private final String IS_USER_GUEST = "guest";
+    private final String USER_EMAIL = "userEmail";
 
     private SharedPreferencesHelper(Context context) {
         sharedPreferences = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
@@ -42,6 +43,14 @@ public class SharedPreferencesHelper {
 
     public String getUserName() {
         return sharedPreferences.getString(USER_NAME, "Guest");
+    }
+
+    public void saveUserEmail(String email) {
+        editor.putString(USER_EMAIL, email).apply();
+    }
+
+    public String getUserEmail() {
+        return sharedPreferences.getString(USER_EMAIL, "guest@gmail.com");
     }
 
     public void setLoggedIn() {

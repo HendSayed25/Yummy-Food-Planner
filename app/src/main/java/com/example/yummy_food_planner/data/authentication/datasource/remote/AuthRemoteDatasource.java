@@ -71,6 +71,10 @@ public class AuthRemoteDatasource {
         return null;
     }
 
+    public User getCurrentUser(){
+        return firebaseUserMapping(auth.getCurrentUser());
+    }
+
     public Single<String> signInAnonymously() {
         return Single.create(emitter -> {
             FirebaseAuth.getInstance().signInAnonymously()

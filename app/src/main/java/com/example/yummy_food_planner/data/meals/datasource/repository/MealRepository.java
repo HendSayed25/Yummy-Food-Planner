@@ -52,4 +52,6 @@ public interface MealRepository {
     Completable deleteMealFromPlan(String mealId, Long date, String userId);
 
     Single<Boolean> isMealPlaned(String mealId, String userId);
+
+    Completable syncUserData();
 }

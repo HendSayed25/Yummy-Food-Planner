@@ -2,6 +2,7 @@ package com.example.yummy_food_planner.data.meals.datasource.repository;
 
 import android.content.Context;
 
+import com.example.yummy_food_planner.data.authentication.datasource.remote.AuthRemoteDatasource;
 import com.example.yummy_food_planner.data.meals.datasource.local.LocalMealDataSource;
 import com.example.yummy_food_planner.data.meals.datasource.remote.RemoteMealDataSource;
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.AreaListResponse;
@@ -11,8 +12,12 @@ import com.example.yummy_food_planner.data.meals.datasource.remote.response.Ingr
 import com.example.yummy_food_planner.data.meals.datasource.remote.response.MealResponse;
 import com.example.yummy_food_planner.data.model.entitiy.Meal;
 import com.example.yummy_food_planner.data.model.entitiy.Plan;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
@@ -22,10 +27,12 @@ public class MealsRepositoryImp implements MealRepository {
 
     private RemoteMealDataSource remoteMealDataSource;
     private LocalMealDataSource localMealDataSource;
+    private AuthRemoteDatasource auth;
 
     public MealsRepositoryImp(Context context) {
         remoteMealDataSource = new RemoteMealDataSource();
         localMealDataSource = new LocalMealDataSource(context.getApplicationContext());
+        auth = new AuthRemoteDatasource();
     }
 
     @Override
@@ -121,5 +128,36 @@ public class MealsRepositoryImp implements MealRepository {
     @Override
     public Single<Boolean> isMealPlaned(String mealId, String userId) {
         return localMealDataSource.isMealPlaned(mealId, userId);
+    }
+
+    @Override
+    public Completable syncUserData() {
+        Observable<List<Meal>> favoriteMeals = localMealDataSource.getAllFavoriteMeals(auth.getCurrentUser().getId());
+
+        Single<List<Plan>> mealPlans = localMealDataSource.getAllMealPlans();
+
+        return favoriteMeals.firstOrError()
+                .flatMapCompletable(meals ->
+                        mealPlans.flatMapCompletable(plans ->
+                                Completable.create(emitter -> {
+                                    String uid = auth.getCurrentUser().getId();
+                                    if (uid == null) {
+                                        emitter.onError(new Exception("No user logged in"));
+                                        return;
+                                    }
+
+                                    Map<String, Object> data = new HashMap<>();
+                                    data.put("favoriteMeals", meals);
+                                    data.put("mealPlans", plans);
+
+                                    FirebaseFirestore.getInstance()
+                                            .collection("users")
+                                            .document(uid)
+                                            .set(data, SetOptions.merge())
+                                            .addOnSuccessListener(aVoid -> emitter.onComplete())
+                                            .addOnFailureListener(emitter::onError);
+                                })
+                        )
+                );
     }
 }

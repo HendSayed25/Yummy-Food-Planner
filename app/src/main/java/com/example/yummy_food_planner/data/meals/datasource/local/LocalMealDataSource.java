@@ -42,6 +42,10 @@ public class LocalMealDataSource {
         return planDao.getMealsByData(userId, date);
     }
 
+    public Single<List<Plan>> getAllMealPlans() {
+        return planDao.getAllMealPlans();
+    }
+
     public Completable addMealToPlan(Plan meal) {
         return planDao.addMeal(meal);
     }

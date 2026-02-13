@@ -33,10 +33,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class SearchPresenterImp implements SearchPresenter {
 
-    private MealRepository mealRepository;
-    private SearchViews view;
-    private Context context;
-    private CompositeDisposable compositeDisposable;
+    private final MealRepository mealRepository;
+    private final SearchViews view;
+    private final Context context;
+    private final CompositeDisposable compositeDisposable;
     private Filter selectedFilterType = Filter.CATEGORY;
     private String selectedValue = "";
     private List<MealUiModel> originalList;

@@ -18,10 +18,10 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FavoritePresenterImp implements FavoritePresenter {
 
-    private MealRepository mealRepository;
-    private AuthRepository authRepository;
-    private FavoriteView view;
-    private CompositeDisposable compositeDisposable;
+    private final MealRepository mealRepository;
+    private final AuthRepository authRepository;
+    private final FavoriteView view;
+    private final CompositeDisposable compositeDisposable;
 
     public FavoritePresenterImp(Context context, FavoriteView view) {
         this.view = view;
@@ -34,7 +34,7 @@ public class FavoritePresenterImp implements FavoritePresenter {
     public void showAllFavorites() {
         compositeDisposable.add(
                 authRepository.getUserId().subscribeOn(Schedulers.io())
-                        .flatMapObservable(userId -> mealRepository.getAllFavoriteMeals(userId))
+                        .flatMapObservable(mealRepository::getAllFavoriteMeals)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
                                 meals -> view.showFavMeals(mapToUiList(meals, m -> new MealUiModel(m.getName(), m.getMealThumb(), m.getId()))),

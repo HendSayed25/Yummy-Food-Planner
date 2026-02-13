@@ -50,7 +50,7 @@ public class SplashFragment extends Fragment implements SplashView {
                 startEndAnimation(view);
                 presenter.checkLoginState();
             }
-        }, 2500);
+        }, 2000);
     }
 
     private void startEnterAnimation() {

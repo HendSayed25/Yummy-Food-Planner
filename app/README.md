@@ -29,7 +29,6 @@ Meal Planner is an Android application that helps users discover, plan, and mana
 - Users can sign in using: ( Email & Password , Google Sign-In Guest mode )
 - Guests can view meals but cannot add meals to favorites or meal plan.
 - Logged in user can Syncs his data (favorites and plans) to Firestore to can access them from any device.
-- 
 
 # Architecture & Tech Stack
 

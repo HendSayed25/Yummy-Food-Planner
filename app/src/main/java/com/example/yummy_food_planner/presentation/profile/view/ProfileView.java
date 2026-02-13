@@ -6,5 +6,6 @@ public interface ProfileView {
     void userIsGuest();
     void userNotAGuest();
     void syncDataSuccessfully();
+    void noInternet();
     void logOut();
 }

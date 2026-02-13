@@ -8,6 +8,7 @@ import com.example.yummy_food_planner.data.authentication.datasource.repository.
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealRepository;
 import com.example.yummy_food_planner.data.meals.datasource.repository.MealsRepositoryImp;
 import com.example.yummy_food_planner.presentation.profile.view.ProfileView;
+import com.example.yummy_food_planner.presentation.shared.utils.NetworkCheck;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -19,9 +20,11 @@ public class ProfilePresenterImp implements ProfilePresenter {
     private AuthRepository repository;
     private MealRepository mealRepository;
     private ProfileView view;
+    private Context context;
 
     public ProfilePresenterImp(Context context, ProfileView view) {
         this.view = view;
+        this.context = context;
         compositeDisposable = new CompositeDisposable();
         repository = new AuthRepositoryImp(context);
         mealRepository = new MealsRepositoryImp(context);
@@ -69,6 +72,12 @@ public class ProfilePresenterImp implements ProfilePresenter {
 
     @Override
     public void syncUserData() {
+
+        if(!NetworkCheck.isNetworkAvailable(context)){
+            view.noInternet();
+            return;
+        }
+
         compositeDisposable.add(
                 mealRepository.syncUserData().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

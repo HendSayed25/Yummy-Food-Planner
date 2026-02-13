@@ -20,7 +20,7 @@ import com.example.yummy_food_planner.presentation.shared.utils.CustomSnackBar;
 
 public class ProfileFragment extends Fragment implements ProfileView {
 
-    private AppCompatButton logOutBtn , syncBtn;
+    private AppCompatButton logOutBtn, syncBtn;
     private ProfilePresenter presenter;
     private TextView usernameValue, emailValue;
 
@@ -44,7 +44,7 @@ public class ProfileFragment extends Fragment implements ProfileView {
 
         logOutBtn.setOnClickListener(v -> presenter.logOut());
 
-        syncBtn.setOnClickListener(v->presenter.syncUserData());
+        syncBtn.setOnClickListener(v -> presenter.syncUserData());
     }
 
     @Override
@@ -72,6 +72,11 @@ public class ProfileFragment extends Fragment implements ProfileView {
     @Override
     public void syncDataSuccessfully() {
         CustomSnackBar.showSnackBar(requireView(), getString(R.string.sync_data_successfully), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
+    }
+
+    @Override
+    public void noInternet() {
+        CustomSnackBar.showSnackBar(requireView(), getString(R.string.no_internet), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
 
     @Override

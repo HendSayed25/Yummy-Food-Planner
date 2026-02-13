@@ -16,11 +16,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ProfilePresenterImp implements ProfilePresenter {
 
-    private CompositeDisposable compositeDisposable;
-    private AuthRepository repository;
-    private MealRepository mealRepository;
-    private ProfileView view;
-    private Context context;
+    private final CompositeDisposable compositeDisposable;
+    private final AuthRepository repository;
+    private final MealRepository mealRepository;
+    private final ProfileView view;
+    private final Context context;
+    private boolean isUserGuest = false;
 
     public ProfilePresenterImp(Context context, ProfileView view) {
         this.view = view;
@@ -35,7 +36,7 @@ public class ProfilePresenterImp implements ProfilePresenter {
         compositeDisposable.add(
                 repository.logout().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.logOut(),
+                                view::logOut,
                                 error -> view.showError(R.string.something_went_wrong)
                         )
         );
@@ -63,6 +64,7 @@ public class ProfilePresenterImp implements ProfilePresenter {
                                 isGuest -> {
                                     if (isGuest) {
                                         view.userIsGuest();
+                                        isUserGuest = true;
                                         view.showUserData("Guest", "guest@gmail.com");
                                     } else view.userNotAGuest();
                                 }
@@ -73,7 +75,12 @@ public class ProfilePresenterImp implements ProfilePresenter {
     @Override
     public void syncUserData() {
 
-        if(!NetworkCheck.isNetworkAvailable(context)){
+        if (isUserGuest) {
+            view.showError(R.string.you_are_browsing_as_a_guest_please_sign_in_to_continue);
+            return;
+        }
+
+        if (!NetworkCheck.isNetworkAvailable(context)) {
             view.noInternet();
             return;
         }
@@ -81,10 +88,8 @@ public class ProfilePresenterImp implements ProfilePresenter {
         compositeDisposable.add(
                 mealRepository.syncUserData().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.syncDataSuccessfully(),
-                                error -> {
-                                    view.showError(R.string.something_went_wrong);
-                                }
+                                view::syncDataSuccessfully,
+                                error -> view.showError(R.string.something_went_wrong)
                         )
         );
     }

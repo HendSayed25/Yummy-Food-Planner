@@ -102,6 +102,6 @@ public class FavoriteFragment extends Fragment implements FavoriteView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

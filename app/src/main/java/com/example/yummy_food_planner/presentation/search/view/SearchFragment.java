@@ -207,4 +207,10 @@ public class SearchFragment extends Fragment implements SearchViews {
     public void noInternet() {
         noInternetLayout.setVisibility(VISIBLE);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) presenter.onDestroy();
+    }
 }

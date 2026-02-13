@@ -116,6 +116,6 @@ public class SignInFragment extends Fragment implements SignInView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
     }
 }

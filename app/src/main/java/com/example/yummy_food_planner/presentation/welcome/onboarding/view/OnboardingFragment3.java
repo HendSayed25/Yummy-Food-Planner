@@ -102,4 +102,10 @@ public class OnboardingFragment3 extends BaseOnboardingFragment implements Onboa
     public void showErrorMessage(int messageId) {
         CustomSnackBar.showSnackBar(requireView(), getString(messageId), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) presenter.onDestroy();
+    }
 }

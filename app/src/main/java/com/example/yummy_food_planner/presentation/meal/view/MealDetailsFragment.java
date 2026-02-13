@@ -246,7 +246,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.onDestroy();
+        if (presenter != null) presenter.onDestroy();
 
         if (playerView != null) {
             playerView.release();

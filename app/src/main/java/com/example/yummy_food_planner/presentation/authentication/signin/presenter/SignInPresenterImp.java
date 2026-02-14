@@ -110,7 +110,7 @@ public class SignInPresenterImp implements SignInPresenter {
                         .andThen(repository.setLoggedIn())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                                () -> view.onSignInSuccess(),
+                                view::onSignInSuccess,
                                 this::handleError
                         )
         );
@@ -124,7 +124,7 @@ public class SignInPresenterImp implements SignInPresenter {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.onSignInSuccess(),
+                                view::onSignInSuccess,
                                 throwable -> view.showError(R.string.something_went_wrong, SignInErrorType.GENERAL)
                         )
         );

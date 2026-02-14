@@ -29,7 +29,12 @@ public class AuthRepositoryImp implements AuthRepository {
 
     @Override
     public Completable signInWithEmailAndPassword(String email, String password) {
-        return remoteDatasource.signInWithEmailAndPassword(email, password);
+        return remoteDatasource
+                .signInWithEmailAndPassword(email, password)
+                .andThen(Completable.fromAction(() -> {
+                    localDataSource.setGuestState(false);
+                    localDataSource.saveUserData(remoteDatasource.getCurrentUser().getId(), generateNameFromEmail(email), email);
+                }));
     }
 
     @Override

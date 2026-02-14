@@ -112,7 +112,8 @@ public class SearchPresenterImp implements SearchPresenter {
 
                                     List<MealDto> filtered = getList(response.getMeals(), searchText);
                                     if (filtered.isEmpty()) { // means -> user search for meal by name without filter
-                                        filtered = response.getMeals().stream().filter(meal -> meal.getStrMeal().contains(searchText)).collect(Collectors.toList());
+                                        filtered = response.getMeals();
+//                                        filtered = response.getMeals().stream().filter(meal -> meal.getStrMeal().contains(searchText)).collect(Collectors.toList());
                                     }
                                     view.showMeals(mapToUiList(filtered,
                                             meal -> new MealUiModel(meal.getStrMeal(), meal.getStrMealThumb(), meal.getIdMeal())), RecyclerListType.MEAL);

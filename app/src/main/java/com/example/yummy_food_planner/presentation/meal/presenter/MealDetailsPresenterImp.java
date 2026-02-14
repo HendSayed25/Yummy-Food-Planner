@@ -83,7 +83,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                                 repository.addMealToFavorite(new Meal(meal.getId(), userId, meal.getName(), meal.getImageUrl())))
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.addedToFav(),
+                                view::addedToFav,
                                 error -> view.showError(R.string.failure_loading)
                         )
         );
@@ -98,7 +98,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                         )
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.deleteFromFav(),
+                                view::deleteFromFav,
                                 error -> view.showError(R.string.failure_loading)
                         )
         );
@@ -113,7 +113,7 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                                 repository.addMealToPlan(new Plan(userId, meal.getId(), date, meal.getName(), meal.getImageUrl())))
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> view.showAddedToMealPlanIcon(),
+                                view::showAddedToMealPlanIcon,
                                 error -> view.showError(R.string.failure_loading)
                         )
         );
@@ -175,10 +175,12 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
     }
 
     private void extractDetails(MealResponse meal) {
-        view.showInstructions(meal.getMeals().get(0).getStrInstructions());
-        getIngredients(meal);
-        view.showMealVideo(getYouTubeId(meal.getMeals().get(0).getStrYoutube()));
-        getMealDetails(meal);
+        if (meal != null && !meal.getMeals().isEmpty()) {
+            view.showInstructions(meal.getMeals().get(0).getStrInstructions());
+            getIngredients(meal);
+            view.showMealVideo(getYouTubeId(meal.getMeals().get(0).getStrYoutube()));
+            getMealDetails(meal);
+        } else view.showError(R.string.something_went_wrong);
     }
 
     private String getYouTubeId(String url) {

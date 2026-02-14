@@ -23,11 +23,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoriteRecycler"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/favoriteTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/favorite_item" />
 
 

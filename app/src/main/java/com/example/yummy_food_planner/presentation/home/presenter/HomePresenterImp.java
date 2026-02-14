@@ -54,13 +54,7 @@ public class HomePresenterImp implements HomePresenter {
                                                         m.getIdMeal()
                                                 )));
                                     },
-                                    error -> {
-                                        if (error instanceof IOException) {
-                                            view.noInternet();
-                                        } else {
-                                            view.showError(R.string.no_meals_for_today);
-                                        }
-                                    }
+                                    error -> view.showError(R.string.no_meals_for_today)
                             )
             );
         } else {
@@ -91,12 +85,8 @@ public class HomePresenterImp implements HomePresenter {
                                                 )));
                                     },
                                     error -> {
-                                        if (error instanceof IOException) {
-                                            view.noInternet();
-                                        } else {
-                                            view.hideLoading();
-                                            view.showError(R.string.no_meals_for_today);
-                                        }
+                                        view.hideLoading();
+                                        view.showError(R.string.no_meals_for_today);
                                     }
                             )
             );

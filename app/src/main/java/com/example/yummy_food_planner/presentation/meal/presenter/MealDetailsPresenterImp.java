@@ -46,13 +46,14 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
 
     @Override
     public void getMealDetailsById(String id) {
+        view.hideViews();
+
         if (!NetworkCheck.isNetworkAvailable(context)) {
             view.noInternet();
             return;
         }
-
-        view.hideViews();
         view.showLoading();
+
         compositeDisposable.add(
                 repository.getMealDetailsById(id).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -63,12 +64,8 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
                                     extractDetails(meal);
                                 },
                                 error -> {
-                                    if (error instanceof IOException) {
-                                        view.noInternet();
-                                    } else {
-                                        view.hideLoading();
-                                        view.showError(R.string.failure_loading);
-                                    }
+                                    view.hideLoading();
+                                    view.showError(R.string.failure_loading);
                                 }
                         )
         );
@@ -213,7 +210,6 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter {
 
             view.showIngredients(ingredients);
         } catch (Exception e) {
-            e.printStackTrace();
             view.showError(R.string.failure_loading);
         }
     }

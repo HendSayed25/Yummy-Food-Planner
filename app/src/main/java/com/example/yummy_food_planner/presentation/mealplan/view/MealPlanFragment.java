@@ -76,11 +76,7 @@ public class MealPlanFragment extends Fragment implements MealPlanView {
         adapter.listener = new MealPlanAdapter.onItemClickListener() {
             @Override
             public void onItemClick(String id, View v) {
-                if (NetworkCheck.isNetworkAvailable(getContext())) {
-                    navigateToMealDetails(id, v);
-                } else {
-                    CustomSnackBar.showSnackBar(requireView(), getString(R.string.no_internet_fav), getResources().getColor(R.color.logo_bg), getResources().getColor(R.color.blue_primary));
-                }
+                navigateToMealDetails(id, v);
             }
 
             @Override

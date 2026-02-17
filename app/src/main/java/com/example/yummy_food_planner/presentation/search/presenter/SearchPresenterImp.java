@@ -113,7 +113,6 @@ public class SearchPresenterImp implements SearchPresenter {
                                     List<MealDto> filtered = getList(response.getMeals(), searchText);
                                     if (filtered.isEmpty()) { // means -> user search for meal by name without filter
                                         filtered = response.getMeals();
-//                                        filtered = response.getMeals().stream().filter(meal -> meal.getStrMeal().contains(searchText)).collect(Collectors.toList());
                                     }
                                     view.showMeals(mapToUiList(filtered,
                                             meal -> new MealUiModel(meal.getStrMeal(), meal.getStrMealThumb(), meal.getIdMeal())), RecyclerListType.MEAL);
@@ -144,8 +143,6 @@ public class SearchPresenterImp implements SearchPresenter {
                         case COUNTRY:
                             matchesChip = meal.getStrArea().equals(selectedValue);
                             break;
-
-
                     }
 
                     return matchesSearch && matchesChip;
@@ -184,12 +181,8 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = countries;
                                 },
                                 error -> {
-                                    if (error instanceof IOException) {
-                                        view.noInternet();
-                                    } else {
-                                        view.hideLoading();
-                                        view.showError(R.string.no_countries_found);
-                                    }
+                                    view.hideLoading();
+                                    view.showError(R.string.no_countries_found);
                                 }
                         )
         );
@@ -225,12 +218,8 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = categories;
                                 },
                                 error -> {
-                                    if (error instanceof IOException) {
-                                        view.noInternet();
-                                    } else {
-                                        view.hideLoading();
-                                        view.showError(R.string.no_categories_found);
-                                    }
+                                    view.hideLoading();
+                                    view.showError(R.string.no_categories_found);
                                 }
                         )
         );
@@ -267,12 +256,8 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = ingredients;
                                 },
                                 error -> {
-                                    if (error instanceof IOException) {
-                                        view.noInternet();
-                                    } else {
-                                        view.hideLoading();
-                                        view.showError(R.string.no_ingredients_found);
-                                    }
+                                    view.hideLoading();
+                                    view.showError(R.string.no_ingredients_found);
                                 }
                         )
         );
@@ -310,12 +295,8 @@ public class SearchPresenterImp implements SearchPresenter {
                                     originalList = meals;
                                 },
                                 error -> {
-                                    if (error instanceof IOException) {
-                                        view.noInternet();
-                                    } else {
-                                        view.hideLoading();
-                                        view.showError(errorMessage);
-                                    }
+                                    view.hideLoading();
+                                    view.showError(errorMessage);
                                 }
                         )
         );

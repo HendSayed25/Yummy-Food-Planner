@@ -83,8 +83,6 @@ public class SearchFragment extends Fragment implements SearchViews {
 
         retryBtn.setOnClickListener(v -> {
             noInternetLayout.setVisibility(GONE);
-
-            if (NetworkCheck.isNetworkAvailable(requireContext())) {
                 if (chipCategory.isChecked()) {
                     presenter.getAllCategories();
                 } else if (chipCountry.isChecked()) {
@@ -92,9 +90,6 @@ public class SearchFragment extends Fragment implements SearchViews {
                 } else {
                     presenter.getAllIngredients();
                 }
-            } else {
-                noInternetLayout.setVisibility(VISIBLE);
-            }
         });
 
         searchAdapter.listener = (data, v) -> {

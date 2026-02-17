@@ -69,13 +69,9 @@ public class HomeFragment extends Fragment implements HomeView {
 
         retryBtn.setOnClickListener(v -> {
             noInternetLayout.setVisibility(GONE);
-            if (NetworkCheck.isNetworkAvailable(requireContext())) {
-                presenter.getRandomMeal();
-                presenter.getMealsByLetter("e");
-            } else {
-                noInternetLayout.setVisibility(VISIBLE);
-            }
-        });
+            presenter.getRandomMeal();
+            presenter.getMealsByLetter("e");
+    });
     }
 
     private void navigateToMealDetails(String id, View view) {

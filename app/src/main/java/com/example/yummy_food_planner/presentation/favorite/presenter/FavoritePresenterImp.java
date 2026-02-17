@@ -51,8 +51,7 @@ public class FavoritePresenterImp implements FavoritePresenter {
                         .flatMapCompletable(userId ->
                                 mealRepository.deleteMealFromFavorite(mealId, userId))
                         .observeOn(AndroidSchedulers.mainThread()).subscribe(
-                                () -> {
-                                },
+                                () -> view.showMessage(R.string.success_delete_message),
                                 error -> view.showMessage(R.string.failure_loading)
                         )
         );

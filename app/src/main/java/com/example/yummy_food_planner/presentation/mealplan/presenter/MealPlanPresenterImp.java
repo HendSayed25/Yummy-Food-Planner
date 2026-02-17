@@ -51,7 +51,7 @@ public class MealPlanPresenterImp implements MealPlanPresenter {
                         .flatMapCompletable(userId -> mealRepository.deleteMealFromPlan(mealId, date, userId))
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
-                                () -> {},
+                                () -> view.showMessage(R.string.success_delete_message),
                                 error -> view.showMessage(R.string.failure_loading)
                         )
         );

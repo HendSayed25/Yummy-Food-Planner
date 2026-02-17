@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -50,7 +51,9 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
     private YouTubePlayerView playerView;
     private YouTubePlayer myYouTubePlayer = null;
     private MealDetailsUiModel currentMeal;
+    private AppCompatButton retryBtn;
     private boolean isFavorite = false;
+    private String mealId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         mealCountry = view.findViewById(R.id.tvMealCountyr);
         mealInstructions = view.findViewById(R.id.tvInstructions);
         noInternetLayout = view.findViewById(R.id.noInternetLayoutMealDetails);
+        retryBtn = noInternetLayout.findViewById(R.id.retryButton);
         loading = view.findViewById(R.id.loadingMealDetails);
         mealCard = view.findViewById(R.id.mealDetailsCard);
         addToFav = mealCard.findViewById(R.id.icAddToFav);
@@ -80,11 +84,18 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView {
         presenter = new MealDetailsPresenterImp(getContext(), this);
 
         if (getArguments() != null) {
-            String mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
+            mealId = MealDetailsFragmentArgs.fromBundle(getArguments()).getMealId();
             presenter.getMealDetailsById(mealId);
             presenter.checkIfFavorite(mealId);
             presenter.checkIfPlanned(mealId);
         }
+
+        retryBtn.setOnClickListener(v -> {
+            noInternetLayout.setVisibility(GONE);
+            presenter.getMealDetailsById(mealId);
+            presenter.checkIfFavorite(mealId);
+            presenter.checkIfPlanned(mealId);
+        });
 
         playerView.setOnClickListener(v -> {
             if (myYouTubePlayer != null) {

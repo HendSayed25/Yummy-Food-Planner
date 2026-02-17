@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment implements HomeView {
             noInternetLayout.setVisibility(GONE);
             presenter.getRandomMeal();
             presenter.getMealsByLetter("e");
-    });
+        });
     }
 
     private void navigateToMealDetails(String id, View view) {

@@ -73,8 +73,7 @@ public class AuthRepositoryImp implements AuthRepository {
 
     @Override
     public Completable logout() {
-        return remoteDatasource.logOut()
-                .andThen(Completable.fromAction(() -> localDataSource.logOut()));
+        return remoteDatasource.logOut();
     }
 
     @Override

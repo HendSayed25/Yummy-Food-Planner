@@ -76,8 +76,4 @@ public class SharedPreferencesHelper {
     public void setGuestState(Boolean state) {
         editor.putBoolean(IS_USER_GUEST, state).apply();
     }
-
-    public void logout() {
-        sharedPreferences.edit().clear().apply();
-    }
 }
